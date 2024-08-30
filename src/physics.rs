@@ -52,7 +52,7 @@ fn ball_to_flipper(ball: &mut Ball, flipper: &Flipper) -> bool {
     let perpendicular_vel = ball.velocity - parallel_vel;
 
     let r = flipper.anchor.distance(closest);
-    let v = -(flipper.vel * r * r * std::f32::consts::PI) / 360.0;
+    let v = -(flipper.vel * r * r * std::f32::consts::PI) / 360.0 * 0.016;
 
     ball.velocity = perpendicular_vel + normal * v;
 
