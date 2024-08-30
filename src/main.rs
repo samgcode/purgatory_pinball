@@ -13,12 +13,13 @@ mod physics;
 
 const GRAVITY: f32 = 200.0;
 
-#[macroquad::main("pumball pingatory")]
+#[macroquad::main("purgatory pinball")]
 async fn main() {
   let gravity = Vec2::new(0.0, GRAVITY);
 
   let mut ball = Ball::new(Vec2::new(300.0, 300.0), Vec2::new(0.0, 0.0));
-  let mut flipper = Flipper::new(Vec2::new(200.0, 500.0), 100.0);
+  let mut flipper_1 = Flipper::new(Vec2::new(200.0, 500.0), 100.0, false);
+  let mut flipper_2 = Flipper::new(Vec2::new(600.0, 525.0), 100.0, true);
   let bumpers = vec![
     Bumper::new(
       Vec2::new(730.0, 650.0),
@@ -56,13 +57,15 @@ async fn main() {
       }
     }
 
-    draw_text("pumber pinbatory", 100.0, 100.0, 30.0, WHITE);
+    draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
 
     ball.update(gravity, dt);
-    flipper.update(dt);
+    flipper_1.update(dt);
+    flipper_2.update(dt);
 
     ball.draw();
-    flipper.draw();
+    flipper_1.draw();
+    flipper_2.draw();
     for bumper in bumpers.iter() {
       bumper.draw();
     }
@@ -70,7 +73,8 @@ async fn main() {
       draw_line_vec(line.0, line.1, 3.0, WHITE);
     }
 
-    physics::ball_to_flipper(&mut ball, &flipper);
+    physics::ball_to_flipper(&mut ball, &flipper_1);
+    physics::ball_to_flipper(&mut ball, &flipper_2);
 
     for bumper in bumpers.iter() {
       ball.update_collision(&bumper);
