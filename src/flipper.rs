@@ -1,9 +1,9 @@
 use macroquad::prelude::*;
 
-const MIN_ANGLE: f32 = 45.0;
+const MIN_ANGLE: f32 = 30.0;
 const MAX_ANGLE: f32 = -20.0;
-const MIN_ANGLE_REV: f32 = 140.0;
-const MAX_ANGLE_REV: f32 = 205.0;
+const MIN_ANGLE_REV: f32 = 150.0;
+const MAX_ANGLE_REV: f32 = 200.0;
 
 const DEG_TO_RAD: f32 = std::f32::consts::PI / 180.0;
 

@@ -13,7 +13,7 @@ impl Bumper {
       pos,
       color,
       strength,
-      radius: 50.0,
+      radius: 40.0,
     }
   }
 

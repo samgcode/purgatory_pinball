@@ -18,8 +18,8 @@ async fn main() {
   let gravity = Vec2::new(0.0, GRAVITY);
 
   let mut ball = Ball::new(Vec2::new(300.0, 300.0), Vec2::new(0.0, 0.0));
-  let mut flipper_1 = Flipper::new(Vec2::new(200.0, 500.0), 100.0, false);
-  let mut flipper_2 = Flipper::new(Vec2::new(600.0, 525.0), 100.0, true);
+  let mut flipper_1 = Flipper::new(Vec2::new(200.0, 450.0), 100.0, false);
+  let mut flipper_2 = Flipper::new(Vec2::new(500.0, 450.0), 100.0, true);
   let bumpers = vec![
     Bumper::new(
       Vec2::new(730.0, 650.0),
@@ -27,23 +27,43 @@ async fn main() {
       500.0,
     ),
     Bumper::new(
-      Vec2::new(200.0, 400.0),
-      Color::new(1.0, 1.0, 0.0, 1.0),
+      Vec2::new(400.0, 250.0),
+      Color::new(1.0, 1.0, 1.0, 1.0),
+      150.0,
+    ),
+    Bumper::new(
+      Vec2::new(150.0, 250.0),
+      Color::new(1.0, 1.0, 1.0, 1.0),
+      150.0,
+    ),
+    Bumper::new(
+      Vec2::new(300.0, 150.0),
+      Color::new(0.0, 1.0, 1.0, 1.0),
       300.0,
     ),
     Bumper::new(
-      Vec2::new(400.0, 300.0),
-      Color::new(1.0, 1.0, 0.0, 1.0),
+      Vec2::new(250.0, 375.0),
+      Color::new(0.0, 1.0, 1.0, 1.0),
+      300.0,
+    ),
+    Bumper::new(
+      Vec2::new(630.0, 150.0),
+      Color::new(0.0, 1.0, 1.0, 1.0),
       300.0,
     ),
   ];
 
   let lines = vec![
-    (Vec2::new(50.0, 50.0), Vec2::new(750.0, 50.0)),
-    (Vec2::new(50.0, 50.0), Vec2::new(50.0, 550.0)),
-    (Vec2::new(750.0, 50.0), Vec2::new(750.0, 600.0)),
-    (Vec2::new(50.0, 550.0), Vec2::new(700.0, 600.0)),
-    (Vec2::new(700.0, 50.0), Vec2::new(750.0, 100.0)),
+    (Vec2::new(50.0, 50.0), Vec2::new(750.0, 50.0)), // top wall
+    (Vec2::new(50.0, 50.0), Vec2::new(50.0, 550.0)), // left wall
+    (Vec2::new(50.0, 550.0), Vec2::new(700.0, 600.0)), // bottom wall
+    (Vec2::new(700.0, 50.0), Vec2::new(750.0, 100.0)), // the booper
+    //
+    (Vec2::new(750.0, 50.0), Vec2::new(750.0, 600.0)), // right wall
+    (Vec2::new(675.0, 150.0), Vec2::new(675.0, 550.0)), // channel wall
+    //
+    (Vec2::new(50.0, 300.0), Vec2::new(200.0, 450.0)), // left ramp
+    (Vec2::new(675.0, 300.0), Vec2::new(500.0, 450.0)), // left ramp
   ];
 
   loop {
@@ -58,6 +78,7 @@ async fn main() {
     }
 
     draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
+    draw_text("[V0.6]", 0.0, 20.0, 30.0, WHITE);
 
     ball.update(gravity, dt);
     flipper_1.update(dt);
