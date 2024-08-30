@@ -3,9 +3,9 @@ use macroquad::prelude::*;
 use crate::bumper::*;
 
 pub struct Ball {
-  pos: Vec2,
-  velocity: Vec2,
-  radius: f32,
+  pub pos: Vec2,
+  pub velocity: Vec2,
+  pub radius: f32,
 }
 
 impl Ball {
@@ -20,6 +20,8 @@ impl Ball {
   pub fn update(&mut self, gravity: Vec2, dt: f32) {
     self.pos += self.velocity * dt;
     self.velocity += gravity * dt;
+
+    // self.pos = Vec2::from(mouse_position());
   }
 
   pub fn draw(&self) {
