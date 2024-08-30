@@ -1,3 +1,4 @@
+use drawing::draw_line_vec;
 use macroquad::prelude::*;
 
 use ball::*;
@@ -20,7 +21,12 @@ async fn main() {
   let mut flipper = Flipper::new(Vec2::new(200.0, 500.0), 100.0);
   let bumpers = vec![
     Bumper::new(
-      Vec2::new(400.0, 500.0),
+      Vec2::new(730.0, 650.0),
+      Color::new(0.0, 1.0, 1.0, 1.0),
+      500.0,
+    ),
+    Bumper::new(
+      Vec2::new(200.0, 400.0),
       Color::new(1.0, 1.0, 0.0, 1.0),
       300.0,
     ),
@@ -29,6 +35,14 @@ async fn main() {
       Color::new(1.0, 1.0, 0.0, 1.0),
       300.0,
     ),
+  ];
+
+  let lines = vec![
+    (Vec2::new(50.0, 50.0), Vec2::new(750.0, 50.0)),
+    (Vec2::new(50.0, 50.0), Vec2::new(50.0, 550.0)),
+    (Vec2::new(750.0, 50.0), Vec2::new(750.0, 600.0)),
+    (Vec2::new(50.0, 550.0), Vec2::new(700.0, 600.0)),
+    (Vec2::new(700.0, 50.0), Vec2::new(750.0, 100.0)),
   ];
 
   loop {
@@ -52,10 +66,17 @@ async fn main() {
     for bumper in bumpers.iter() {
       bumper.draw();
     }
+    for line in lines.iter() {
+      draw_line_vec(line.0, line.1, 3.0, WHITE);
+    }
 
-    physics::update_collision(&mut ball, &mut flipper);
+    physics::ball_to_flipper(&mut ball, &flipper);
+
     for bumper in bumpers.iter() {
       ball.update_collision(&bumper);
+    }
+    for line in lines.iter() {
+      physics::ball_to_line(&mut ball, *line);
     }
 
     next_frame().await
