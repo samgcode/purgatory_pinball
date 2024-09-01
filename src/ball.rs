@@ -33,11 +33,13 @@ impl Ball {
     );
   }
 
-  pub fn update_collision(&mut self, bumper: &Bumper) {
+  pub fn update_collision(&mut self, bumper: &mut Bumper) {
     let distance = (self.pos - bumper.pos).length();
     let overlap = self.radius + bumper.radius - distance;
 
     if overlap > 0.0 {
+      bumper.hit();
+
       let normal: Vec2 = (self.pos - bumper.pos).normalize();
       self.pos += normal * overlap;
       self.velocity = normal * bumper.strength;

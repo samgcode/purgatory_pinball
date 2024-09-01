@@ -1,10 +1,12 @@
 use drawing::draw_line_vec;
 use macroquad::prelude::*;
 
+use assets::*;
 use ball::*;
 use bumper::*;
 use flipper::*;
 
+mod assets;
 mod ball;
 mod bumper;
 mod drawing;
@@ -17,40 +19,18 @@ const GRAVITY: f32 = 200.0;
 async fn main() {
   let gravity = Vec2::new(0.0, GRAVITY);
 
+  let assets = load_assets().await;
+
   let mut ball = Ball::new(Vec2::new(300.0, 300.0), Vec2::new(0.0, 0.0));
   let mut flipper_1 = Flipper::new(Vec2::new(200.0, 450.0), 100.0, false);
   let mut flipper_2 = Flipper::new(Vec2::new(500.0, 450.0), 100.0, true);
-  let bumpers = vec![
-    Bumper::new(
-      Vec2::new(730.0, 650.0),
-      Color::new(0.0, 1.0, 1.0, 1.0),
-      500.0,
-    ),
-    Bumper::new(
-      Vec2::new(400.0, 250.0),
-      Color::new(1.0, 1.0, 1.0, 1.0),
-      150.0,
-    ),
-    Bumper::new(
-      Vec2::new(150.0, 250.0),
-      Color::new(1.0, 1.0, 1.0, 1.0),
-      150.0,
-    ),
-    Bumper::new(
-      Vec2::new(300.0, 150.0),
-      Color::new(0.0, 1.0, 1.0, 1.0),
-      300.0,
-    ),
-    Bumper::new(
-      Vec2::new(250.0, 375.0),
-      Color::new(0.0, 1.0, 1.0, 1.0),
-      300.0,
-    ),
-    Bumper::new(
-      Vec2::new(630.0, 150.0),
-      Color::new(0.0, 1.0, 1.0, 1.0),
-      300.0,
-    ),
+  let mut bumpers = vec![
+    Bumper::new(Vec2::new(730.0, 650.0), 500.0, &assets),
+    Bumper::new(Vec2::new(400.0, 250.0), 150.0, &assets),
+    Bumper::new(Vec2::new(150.0, 250.0), 150.0, &assets),
+    Bumper::new(Vec2::new(300.0, 150.0), 300.0, &assets),
+    Bumper::new(Vec2::new(250.0, 375.0), 300.0, &assets),
+    Bumper::new(Vec2::new(630.0, 150.0), 300.0, &assets),
   ];
 
   let lines = vec![
@@ -78,32 +58,33 @@ async fn main() {
     }
 
     draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
-    draw_text("[V0.6]", 0.0, 20.0, 30.0, WHITE);
+    draw_text("[V0.7]", 0.0, 20.0, 30.0, WHITE);
 
     ball.update(gravity, dt);
     flipper_1.update(dt);
     flipper_2.update(dt);
 
-    ball.draw();
-    flipper_1.draw();
-    flipper_2.draw();
-    for bumper in bumpers.iter() {
-      bumper.draw();
-    }
-    for line in lines.iter() {
-      draw_line_vec(line.0, line.1, 3.0, WHITE);
-    }
+    if dt > 0.0 {
+      ball.draw();
+      flipper_1.draw();
+      flipper_2.draw();
+      for bumper in bumpers.iter_mut() {
+        bumper.draw(&assets);
+      }
+      for line in lines.iter() {
+        draw_line_vec(line.0, line.1, 3.0, WHITE);
+      }
 
-    physics::ball_to_flipper(&mut ball, &flipper_1);
-    physics::ball_to_flipper(&mut ball, &flipper_2);
+      physics::ball_to_flipper(&mut ball, &flipper_1);
+      physics::ball_to_flipper(&mut ball, &flipper_2);
 
-    for bumper in bumpers.iter() {
-      ball.update_collision(&bumper);
+      for bumper in bumpers.iter_mut() {
+        ball.update_collision(bumper);
+      }
+      for line in lines.iter() {
+        physics::ball_to_line(&mut ball, *line);
+      }
     }
-    for line in lines.iter() {
-      physics::ball_to_line(&mut ball, *line);
-    }
-
     next_frame().await
   }
 }
