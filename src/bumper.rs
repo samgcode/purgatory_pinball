@@ -31,12 +31,12 @@ impl Bumper {
   pub fn draw(&mut self, assets: &Assets) {
     if self.animation_frame > 0 {
       self.animation_frame += 1;
-      if self.animation_frame >= assets.bumper_blue.animation.len() {
+      if self.animation_frame >= assets.bumper_blue.animation_length {
         self.animation_frame = 0;
       }
     }
 
-    if self.animation_frame > assets.bumper_blue.animation.len() {
+    if self.animation_frame > assets.bumper_blue.animation_length {
       self.animation_frame = 0;
     }
 
