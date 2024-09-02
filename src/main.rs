@@ -25,12 +25,13 @@ async fn main() {
   let mut flipper_1 = Flipper::new(Vec2::new(200.0, 450.0), 100.0, false);
   let mut flipper_2 = Flipper::new(Vec2::new(500.0, 450.0), 100.0, true);
   let mut bumpers = vec![
-    Bumper::new(Vec2::new(730.0, 650.0), 500.0, &assets),
-    Bumper::new(Vec2::new(400.0, 250.0), 150.0, &assets),
-    Bumper::new(Vec2::new(150.0, 250.0), 150.0, &assets),
-    Bumper::new(Vec2::new(300.0, 150.0), 300.0, &assets),
-    Bumper::new(Vec2::new(250.0, 375.0), 300.0, &assets),
-    Bumper::new(Vec2::new(630.0, 150.0), 300.0, &assets),
+    Bumper::new(Vec2::new(730.0, 650.0), 600.0, &assets, Type::Pink),
+    Bumper::new(Vec2::new(535.0, 300.0), 500.0, &assets, Type::Pink),
+    Bumper::new(Vec2::new(400.0, 250.0), 100.0, &assets, Type::White),
+    Bumper::new(Vec2::new(150.0, 250.0), 100.0, &assets, Type::White),
+    Bumper::new(Vec2::new(300.0, 150.0), 400.0, &assets, Type::Blue),
+    Bumper::new(Vec2::new(250.0, 375.0), 400.0, &assets, Type::Blue),
+    Bumper::new(Vec2::new(630.0, 150.0), 400.0, &assets, Type::Blue),
   ];
 
   let lines = vec![
@@ -58,7 +59,7 @@ async fn main() {
     }
 
     draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
-    draw_text("[V0.7]", 0.0, 20.0, 30.0, WHITE);
+    draw_text("[V0.9]", 0.0, 20.0, 30.0, WHITE);
 
     ball.update(gravity, dt);
     flipper_1.update(dt);
