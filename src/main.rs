@@ -50,6 +50,8 @@ async fn main() {
   let mut dt = 0.0;
 
   let mut score = 0;
+  let mut lives = 3;
+  let mut respawning = false;
 
   loop {
     dt += get_frame_time();
@@ -76,6 +78,19 @@ async fn main() {
         for line in lines.iter() {
           physics::ball_to_line(&mut ball, *line);
         }
+
+        if ball.pos.y > 490.0 && !respawning {
+          lives -= 1;
+          respawning = true;
+          if lives < 0 {
+            lives = 3;
+            score = 0;
+          }
+        }
+
+        if respawning && ball.pos.y < 490.0 {
+          respawning = false;
+        }
       }
       dt = 0.0;
     }
@@ -84,10 +99,17 @@ async fn main() {
     flipper_2.update();
 
     draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
-    draw_text("[V0.11]", 0.0, 20.0, 30.0, WHITE);
+    draw_text("[V0.12]", 0.0, 20.0, 30.0, WHITE);
     draw_text(
       format!("score: {}", score).as_str(),
-      100.0,
+      200.0,
+      20.0,
+      30.0,
+      WHITE,
+    );
+    draw_text(
+      format!("lives: {}", lives).as_str(),
+      500.0,
       20.0,
       30.0,
       WHITE,

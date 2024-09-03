@@ -1,10 +1,11 @@
 # TODO List
 
-- [ ] add basic scoring
-  - [x] update score
-  - [ ] detect lose
-  - [x] display score
+- [x] add basic scoring
+  - [x] detect lose
 - [ ] full screen
+- [ ] refactor game logic
+  - [ ] create game system to track game info
+  - [ ] game board struct?
 - [ ] bumper cooldown
 - [ ] add trigger zones
 - [ ] better debug
