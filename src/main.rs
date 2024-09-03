@@ -13,7 +13,7 @@ mod drawing;
 mod flipper;
 mod physics;
 
-const GRAVITY: f32 = 200.0;
+const GRAVITY: f32 = 400.0;
 
 #[macroquad::main("purgatory pinball")]
 async fn main() {
@@ -25,67 +25,77 @@ async fn main() {
   let mut flipper_1 = Flipper::new(Vec2::new(200.0, 450.0), 100.0, false);
   let mut flipper_2 = Flipper::new(Vec2::new(500.0, 450.0), 100.0, true);
   let mut bumpers = vec![
-    Bumper::new(Vec2::new(730.0, 650.0), 600.0, &assets, Type::Pink),
-    Bumper::new(Vec2::new(535.0, 300.0), 500.0, &assets, Type::Pink),
-    Bumper::new(Vec2::new(400.0, 250.0), 100.0, &assets, Type::White),
-    Bumper::new(Vec2::new(150.0, 250.0), 100.0, &assets, Type::White),
-    Bumper::new(Vec2::new(300.0, 150.0), 400.0, &assets, Type::Blue),
-    Bumper::new(Vec2::new(250.0, 375.0), 400.0, &assets, Type::Blue),
-    Bumper::new(Vec2::new(630.0, 150.0), 400.0, &assets, Type::Blue),
+    Bumper::new(Vec2::new(730.0, 650.0), 700.0, &assets, Type::Pink),
+    Bumper::new(Vec2::new(535.0, 300.0), 600.0, &assets, Type::Pink),
+    Bumper::new(Vec2::new(400.0, 250.0), 150.0, &assets, Type::White),
+    Bumper::new(Vec2::new(150.0, 250.0), 150.0, &assets, Type::White),
+    Bumper::new(Vec2::new(300.0, 150.0), 500.0, &assets, Type::Blue),
+    Bumper::new(Vec2::new(250.0, 375.0), 500.0, &assets, Type::Blue),
+    Bumper::new(Vec2::new(630.0, 150.0), 500.0, &assets, Type::Blue),
   ];
 
   let lines = vec![
     (Vec2::new(50.0, 50.0), Vec2::new(750.0, 50.0)), // top wall
-    (Vec2::new(50.0, 50.0), Vec2::new(50.0, 550.0)), // left wall
-    (Vec2::new(50.0, 550.0), Vec2::new(700.0, 600.0)), // bottom wall
+    (Vec2::new(50.0, 50.0), Vec2::new(50.0, 520.0)), // left wall
+    (Vec2::new(50.0, 520.0), Vec2::new(700.0, 600.0)), // bottom wall
     (Vec2::new(700.0, 50.0), Vec2::new(750.0, 100.0)), // the booper
     //
     (Vec2::new(750.0, 50.0), Vec2::new(750.0, 600.0)), // right wall
     (Vec2::new(675.0, 150.0), Vec2::new(675.0, 550.0)), // channel wall
     //
     (Vec2::new(50.0, 300.0), Vec2::new(200.0, 450.0)), // left ramp
-    (Vec2::new(675.0, 300.0), Vec2::new(500.0, 450.0)), // left ramp
+    (Vec2::new(675.0, 300.0), Vec2::new(500.0, 450.0)), // right ramp
   ];
 
-  loop {
-    let mut dt = 0.016;
-    clear_background(BLACK);
+  let mut dt = 0.0;
 
-    if is_key_down(KeyCode::Space) {
-      dt = 0.0;
-      if is_key_pressed(KeyCode::Right) {
-        dt = 0.016;
+  loop {
+    dt += get_frame_time();
+
+    if dt >= 1.0 / 61.0 {
+      clear_background(BLACK);
+
+      if dt > 0.0 {
+        ball.physics_update(gravity, dt);
+        flipper_1.physics_update(dt);
+        flipper_2.physics_update(dt);
+
+        for bumper in bumpers.iter_mut() {
+          bumper.physics_update();
+        }
+
+        physics::ball_to_flipper(&mut ball, &flipper_1);
+        physics::ball_to_flipper(&mut ball, &flipper_2);
+
+        for bumper in bumpers.iter_mut() {
+          ball.update_collision(bumper);
+        }
+
+        for line in lines.iter() {
+          physics::ball_to_line(&mut ball, *line);
+        }
       }
+      dt = 0.0;
     }
+
+    flipper_1.update();
+    flipper_2.update();
 
     draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
-    draw_text("[V0.9]", 0.0, 20.0, 30.0, WHITE);
+    draw_text("[V0.10]", 0.0, 20.0, 30.0, WHITE);
 
-    ball.update(gravity, dt);
-    flipper_1.update(dt);
-    flipper_2.update(dt);
+    ball.draw();
+    flipper_1.draw();
+    flipper_2.draw();
 
-    if dt > 0.0 {
-      ball.draw();
-      flipper_1.draw();
-      flipper_2.draw();
-      for bumper in bumpers.iter_mut() {
-        bumper.draw(&assets);
-      }
-      for line in lines.iter() {
-        draw_line_vec(line.0, line.1, 3.0, WHITE);
-      }
-
-      physics::ball_to_flipper(&mut ball, &flipper_1);
-      physics::ball_to_flipper(&mut ball, &flipper_2);
-
-      for bumper in bumpers.iter_mut() {
-        ball.update_collision(bumper);
-      }
-      for line in lines.iter() {
-        physics::ball_to_line(&mut ball, *line);
-      }
+    for bumper in bumpers.iter_mut() {
+      bumper.draw(&assets);
     }
+
+    for line in lines.iter() {
+      draw_line_vec(line.0, line.1, 3.0, WHITE);
+    }
+
     next_frame().await
   }
 }

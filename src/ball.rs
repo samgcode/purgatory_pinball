@@ -17,11 +17,9 @@ impl Ball {
     }
   }
 
-  pub fn update(&mut self, gravity: Vec2, dt: f32) {
+  pub fn physics_update(&mut self, gravity: Vec2, dt: f32) {
     self.pos += self.velocity * dt;
     self.velocity += gravity * dt;
-
-    // self.pos = Vec2::from(mouse_position());
   }
 
   pub fn draw(&self) {

@@ -15,7 +15,8 @@ pub struct Bumper {
   effect_type: Type,
   pub strength: f32,
   pub radius: f32,
-  pub animation_frame: usize,
+  animation_frame: usize,
+  animation_length: usize,
 }
 
 impl Bumper {
@@ -29,6 +30,12 @@ impl Bumper {
       strength,
       radius: 30.0,
       animation_frame: 0,
+      animation_length: match &effect_type {
+        Type::Blue => assets.bumper_blue.animation_length,
+        Type::White => assets.bumper_white.animation_length,
+        Type::Pink => assets.bumper_pink.animation_length,
+        Type::Orange => assets.bumper_orange.animation_length,
+      },
       effect_type,
     }
   }
@@ -37,18 +44,20 @@ impl Bumper {
     self.animation_frame = 1;
   }
 
-  pub fn draw(&mut self, assets: &Assets) {
+  pub fn physics_update(&mut self) {
     if self.animation_frame > 0 {
       self.animation_frame += 1;
-      if self.animation_frame >= assets.bumper_blue.animation_length {
+      if self.animation_frame >= self.animation_length {
         self.animation_frame = 0;
       }
     }
 
-    if self.animation_frame > assets.bumper_blue.animation_length {
+    if self.animation_frame > self.animation_length {
       self.animation_frame = 0;
     }
+  }
 
+  pub fn draw(&self, assets: &Assets) {
     match self.effect_type {
       Type::Blue => {
         assets

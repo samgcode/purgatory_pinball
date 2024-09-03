@@ -31,7 +31,7 @@ impl Flipper {
     }
   }
 
-  pub fn update(&mut self, dt: f32) {
+  pub fn update(&mut self) {
     if is_key_pressed(KeyCode::A) {
       if self.reversed {
         if self.angle < MAX_ANGLE_REV {
@@ -43,7 +43,9 @@ impl Flipper {
         }
       }
     }
+  }
 
+  pub fn physics_update(&mut self, dt: f32) {
     if self.reversed {
       if self.vel == SPEED {
         if self.angle > MAX_ANGLE_REV {
