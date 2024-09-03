@@ -1,18 +1,11 @@
 use macroquad::prelude::*;
 
 use assets::*;
-use ball::*;
-use bumper::*;
 use engine::*;
-use flipper::*;
 
 mod assets;
-mod ball;
-mod bumper;
 mod drawing;
 mod engine;
-mod flipper;
-mod physics;
 
 const WIDTH: f32 = 1920.0;
 const HEIGHT: f32 = 1080.0;
@@ -48,7 +41,7 @@ async fn main() {
     game.update(dt);
     game.draw();
 
-    draw_text("[V0.14]", 0.0, 20.0, 30.0, WHITE);
+    draw_text("[V0.15]", 0.0, 20.0, 30.0, WHITE);
 
     set_default_camera();
 

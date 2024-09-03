@@ -1,8 +1,6 @@
 use macroquad::prelude::*;
 
-use crate::Ball;
-use crate::Bumper;
-use crate::Flipper;
+use crate::engine::objects::*;
 
 pub fn ball_to_bumper(ball: &mut Ball, bumper: &mut Bumper) -> i32 {
   let distance = (ball.pos - bumper.pos).length();

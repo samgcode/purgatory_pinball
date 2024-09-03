@@ -2,7 +2,7 @@ use macroquad::prelude::*;
 
 use crate::Assets;
 
-pub enum Type {
+pub enum BumperType {
   Blue,
   White,
   Pink,
@@ -12,7 +12,7 @@ pub enum Type {
 pub struct Bumper {
   pub pos: Vec2,
   texture: Texture2D,
-  effect_type: Type,
+  effect_type: BumperType,
   pub strength: f32,
   pub radius: f32,
   animation_frame: usize,
@@ -20,7 +20,7 @@ pub struct Bumper {
 }
 
 impl Bumper {
-  pub fn new(pos: Vec2, strength: f32, assets: &Assets, effect_type: Type) -> Self {
+  pub fn new(pos: Vec2, strength: f32, assets: &Assets, effect_type: BumperType) -> Self {
     let texture = Texture2D::empty();
     texture.set_filter(FilterMode::Nearest);
 
@@ -31,10 +31,10 @@ impl Bumper {
       radius: 30.0,
       animation_frame: 0,
       animation_length: match &effect_type {
-        Type::Blue => assets.bumper_blue.animation_length,
-        Type::White => assets.bumper_white.animation_length,
-        Type::Pink => assets.bumper_pink.animation_length,
-        Type::Orange => assets.bumper_orange.animation_length,
+        BumperType::Blue => assets.bumper_blue.animation_length,
+        BumperType::White => assets.bumper_white.animation_length,
+        BumperType::Pink => assets.bumper_pink.animation_length,
+        BumperType::Orange => assets.bumper_orange.animation_length,
       },
       effect_type,
     }
@@ -59,22 +59,22 @@ impl Bumper {
 
   pub fn draw(&self, assets: &Assets) {
     match self.effect_type {
-      Type::Blue => {
+      BumperType::Blue => {
         assets
           .bumper_blue
           .draw(&self.texture, self.pos, self.radius, self.animation_frame)
       }
-      Type::White => {
+      BumperType::White => {
         assets
           .bumper_white
           .draw(&self.texture, self.pos, self.radius, self.animation_frame)
       }
-      Type::Pink => {
+      BumperType::Pink => {
         assets
           .bumper_pink
           .draw(&self.texture, self.pos, self.radius, self.animation_frame)
       }
-      Type::Orange => {
+      BumperType::Orange => {
         assets
           .bumper_orange
           .draw(&self.texture, self.pos, self.radius, self.animation_frame)

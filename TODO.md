@@ -1,8 +1,8 @@
 # TODO List
 
-- [x] full screen / fix screen resizse
 - [ ] bumper cooldown
 - [ ] add trigger zones
+  - [ ] ball zone collision
 - [ ] better debug
   - [ ] pause
   - [ ] show hitboxes
