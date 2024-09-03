@@ -15,7 +15,7 @@ impl Ball {
     }
   }
 
-  pub fn physics_update(&mut self, gravity: Vec2, dt: f32) {
+  pub fn fixed_update(&mut self, gravity: Vec2, dt: f32) {
     self.pos += self.velocity * dt;
     self.velocity += gravity * dt;
   }

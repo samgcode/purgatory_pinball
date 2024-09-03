@@ -44,7 +44,7 @@ impl Bumper {
     self.animation_frame = 1;
   }
 
-  pub fn physics_update(&mut self) {
+  pub fn fixed_update(&mut self) {
     if self.animation_frame > 0 {
       self.animation_frame += 1;
       if self.animation_frame >= self.animation_length {

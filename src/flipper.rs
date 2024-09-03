@@ -45,7 +45,7 @@ impl Flipper {
     }
   }
 
-  pub fn physics_update(&mut self, dt: f32) {
+  pub fn fixed_update(&mut self, dt: f32) {
     if self.reversed {
       if self.vel == SPEED {
         if self.angle > MAX_ANGLE_REV {

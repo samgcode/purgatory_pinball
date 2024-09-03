@@ -71,13 +71,13 @@ impl Game {
     self.flipper.1.update();
   }
 
-  pub fn physics_update(&mut self, fixed_dt: f32) {
-    self.ball.physics_update(GRAVITY, fixed_dt);
-    self.flipper.0.physics_update(fixed_dt);
-    self.flipper.1.physics_update(fixed_dt);
+  pub fn fixed_update(&mut self, fixed_dt: f32) {
+    self.ball.fixed_update(GRAVITY, fixed_dt);
+    self.flipper.0.fixed_update(fixed_dt);
+    self.flipper.1.fixed_update(fixed_dt);
 
     for bumper in self.bumpers.iter_mut() {
-      bumper.physics_update();
+      bumper.fixed_update();
     }
 
     physics::ball_to_flipper(&mut self.ball, &self.flipper.0);
@@ -109,7 +109,7 @@ impl Game {
 
   pub fn draw(&mut self) {
     // draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
-    draw_text("[V0.13]", 0.0, 20.0, 30.0, WHITE);
+
     draw_text(
       format!("score: {}", self.score).as_str(),
       200.0,
