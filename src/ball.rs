@@ -1,7 +1,5 @@
 use macroquad::prelude::*;
 
-use crate::bumper::*;
-
 pub struct Ball {
   pub pos: Vec2,
   pub velocity: Vec2,
@@ -29,18 +27,5 @@ impl Ball {
       self.radius,
       Color::new(0.5, 0.5, 0.5, 1.0),
     );
-  }
-
-  pub fn update_collision(&mut self, bumper: &mut Bumper) {
-    let distance = (self.pos - bumper.pos).length();
-    let overlap = self.radius + bumper.radius - distance;
-
-    if overlap > 0.0 {
-      bumper.hit();
-
-      let normal: Vec2 = (self.pos - bumper.pos).normalize();
-      self.pos += normal * overlap;
-      self.velocity = normal * bumper.strength;
-    }
   }
 }

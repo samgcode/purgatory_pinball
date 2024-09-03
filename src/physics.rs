@@ -1,7 +1,25 @@
 use macroquad::prelude::*;
 
 use crate::Ball;
+use crate::Bumper;
 use crate::Flipper;
+
+pub fn ball_to_bumper(ball: &mut Ball, bumper: &mut Bumper) -> i32 {
+  let distance = (ball.pos - bumper.pos).length();
+  let overlap = ball.radius + bumper.radius - distance;
+
+  if overlap > 0.0 {
+    bumper.hit();
+
+    let normal: Vec2 = (ball.pos - bumper.pos).normalize();
+    ball.pos += normal * overlap;
+    ball.velocity = normal * bumper.strength;
+
+    return bumper.strength as i32;
+  }
+
+  return 0;
+}
 
 pub fn ball_to_flipper(ball: &mut Ball, flipper: &Flipper) {
   let d = flipper.tip - flipper.anchor;

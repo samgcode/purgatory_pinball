@@ -49,6 +49,8 @@ async fn main() {
 
   let mut dt = 0.0;
 
+  let mut score = 0;
+
   loop {
     dt += get_frame_time();
 
@@ -68,7 +70,7 @@ async fn main() {
         physics::ball_to_flipper(&mut ball, &flipper_2);
 
         for bumper in bumpers.iter_mut() {
-          ball.update_collision(bumper);
+          score += physics::ball_to_bumper(&mut ball, bumper);
         }
 
         for line in lines.iter() {
@@ -82,7 +84,14 @@ async fn main() {
     flipper_2.update();
 
     draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
-    draw_text("[V0.10]", 0.0, 20.0, 30.0, WHITE);
+    draw_text("[V0.11]", 0.0, 20.0, 30.0, WHITE);
+    draw_text(
+      format!("score: {}", score).as_str(),
+      100.0,
+      20.0,
+      30.0,
+      WHITE,
+    );
 
     ball.draw();
     flipper_1.draw();
