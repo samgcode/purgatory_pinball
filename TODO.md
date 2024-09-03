@@ -3,8 +3,8 @@
 - [x] add basic scoring
   - [x] detect lose
 - [ ] full screen
-- [ ] refactor game logic
-  - [ ] create game system to track game info
+- [x] refactor game logic
+  - [x] create game system to track game info
   - [ ] game board struct?
 - [ ] bumper cooldown
 - [ ] add trigger zones
