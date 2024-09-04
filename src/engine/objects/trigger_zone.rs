@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-pub enum State {
+pub enum CollisionState {
   Enter,
   Stay,
   Leave,
@@ -8,17 +8,28 @@ pub enum State {
 }
 
 pub struct TriggerZone {
-  pub pos: Vec2,
-  pub size: Vec2,
-  pub state: State,
+  pub bounds: (Vec2, Vec2),
+  pub colliding: bool,
+  pub state: CollisionState,
 }
 
 impl TriggerZone {
-  fn new(pos: Vec2, size: Vec2) -> Self {
+  pub fn new(pos: Vec2, size: Vec2) -> Self {
     Self {
-      pos,
-      size,
-      state: State::None,
+      bounds: (pos, pos + size),
+      colliding: false,
+      state: CollisionState::None,
     }
+  }
+
+  pub fn draw(&self) {
+    draw_rectangle_lines(
+      self.bounds.0.x,
+      self.bounds.0.y,
+      self.bounds.1.x - self.bounds.0.x,
+      self.bounds.1.y - self.bounds.0.y,
+      2.0,
+      RED,
+    )
   }
 }

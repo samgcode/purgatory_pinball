@@ -1,8 +1,8 @@
 # TODO List
 
 - [ ] bumper cooldown
-- [ ] add trigger zones
-  - [ ] ball zone collision
+- [x] add trigger zones
+  - [x] ball zone collision
 - [ ] better debug
   - [ ] pause
   - [ ] show hitboxes

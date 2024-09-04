@@ -123,3 +123,23 @@ pub fn ball_to_line(ball: &mut Ball, line: (Vec2, Vec2)) {
 pub fn inverse_lerp_vec(v: Vec2, a: Vec2, b: Vec2) -> f32 {
   return (v.x - a.x) / (b.x - a.x);
 }
+
+pub fn ball_trigger_zone(ball: &Ball, zone: &mut TriggerZone) {
+  let test = ball.pos.clamp(zone.bounds.0, zone.bounds.1);
+
+  if ball.pos.distance(test) <= ball.radius {
+    if zone.colliding {
+      zone.state = CollisionState::Stay;
+    } else {
+      zone.state = CollisionState::Enter;
+    }
+    zone.colliding = true;
+    return;
+  }
+  if zone.colliding {
+    zone.state = CollisionState::Leave;
+  } else {
+    zone.state = CollisionState::None;
+  }
+  zone.colliding = false;
+}

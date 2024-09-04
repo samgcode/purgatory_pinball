@@ -9,23 +9,23 @@ pub struct Game {
   flipper: (Flipper, Flipper),
   bumpers: Vec<Bumper>,
   lines: Vec<(Vec2, Vec2)>,
+  trigger_zones: Vec<TriggerZone>,
 
   score: i32,
   lives: i32,
-  respawning: bool,
 }
 
 impl Game {
   pub async fn init() -> Self {
     let assets = load_assets().await;
 
-    let ball = Ball::new(Vec2::new(300.0, 300.0), Vec2::new(0.0, 0.0));
+    let ball = Ball::new(Vec2::new(725.0, 300.0), Vec2::new(0.0, 0.0));
     let flipper = (
       Flipper::new(Vec2::new(200.0, 450.0), 100.0, false),
       Flipper::new(Vec2::new(500.0, 450.0), 100.0, true),
     );
     let bumpers = vec![
-      Bumper::new(Vec2::new(730.0, 650.0), 700.0, &assets, BumperType::Pink),
+      Bumper::new(Vec2::new(730.0, 740.0), 780.0, &assets, BumperType::Pink),
       Bumper::new(Vec2::new(535.0, 300.0), 600.0, &assets, BumperType::Pink),
       Bumper::new(Vec2::new(400.0, 250.0), 150.0, &assets, BumperType::White),
       Bumper::new(Vec2::new(150.0, 250.0), 150.0, &assets, BumperType::White),
@@ -36,26 +36,31 @@ impl Game {
 
     let lines = vec![
       (Vec2::new(50.0, 50.0), Vec2::new(750.0, 50.0)), // top wall
-      (Vec2::new(50.0, 50.0), Vec2::new(50.0, 520.0)), // left wall
-      (Vec2::new(50.0, 520.0), Vec2::new(700.0, 600.0)), // bottom wall
+      (Vec2::new(50.0, 50.0), Vec2::new(50.0, 620.0)), // left wall
+      (Vec2::new(50.0, 620.0), Vec2::new(700.0, 700.0)), // bottom wall
       (Vec2::new(700.0, 50.0), Vec2::new(750.0, 100.0)), // the booper
       //
-      (Vec2::new(750.0, 50.0), Vec2::new(750.0, 600.0)), // right wall
-      (Vec2::new(675.0, 150.0), Vec2::new(675.0, 550.0)), // channel wall
+      (Vec2::new(750.0, 50.0), Vec2::new(750.0, 700.0)), // right wall
+      (Vec2::new(675.0, 150.0), Vec2::new(675.0, 650.0)), // channel wall
       //
       (Vec2::new(50.0, 300.0), Vec2::new(200.0, 450.0)), // left ramp
       (Vec2::new(675.0, 300.0), Vec2::new(500.0, 450.0)), // right ramp
     ];
+
+    let trigger_zones = vec![TriggerZone::new(
+      Vec2::new(50.0, 540.0),
+      Vec2::new(625.0, 20.0),
+    )];
 
     return Self {
       assets,
       ball,
       flipper,
       bumpers,
+      trigger_zones,
       lines,
       score: 0,
       lives: 3,
-      respawning: false,
     };
   }
 
@@ -84,19 +89,18 @@ impl Game {
       physics::ball_to_line(&mut self.ball, *line);
     }
 
-    if self.ball.pos.y > 490.0 && !self.respawning {
+    for zone in self.trigger_zones.iter_mut() {
+      physics::ball_trigger_zone(&mut self.ball, zone);
+    }
+
+    if let CollisionState::Enter = self.trigger_zones[0].state {
       self.lives -= 1;
-      self.respawning = true;
       if self.lives < 0 {
         println!("score: {}", self.score);
 
         self.lives = 3;
         self.score = 0;
       }
-    }
-
-    if self.respawning && self.ball.pos.y < 490.0 {
-      self.respawning = false;
     }
   }
 
