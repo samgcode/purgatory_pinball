@@ -47,12 +47,14 @@ impl Game {
       (Vec2::new(675.0, 150.0), Vec2::new(675.0, 650.0)), // channel wall
       //
       (Vec2::new(50.0, 300.0), Vec2::new(200.0, 450.0)), // left ramp
+      (Vec2::new(50.0, 475.0), Vec2::new(250.0, 500.0)),
       (Vec2::new(675.0, 300.0), Vec2::new(500.0, 450.0)), // right ramp
+      (Vec2::new(675.0, 475.0), Vec2::new(450.0, 500.0)), // right ramp
     ];
 
     let trigger_zones = vec![TriggerZone::new(
       Vec2::new(50.0, 540.0),
-      Vec2::new(625.0, 20.0),
+      Vec2::new(615.0, 20.0),
     )];
 
     let score_system = ScoreSystem::new();
@@ -103,7 +105,7 @@ impl Game {
     if let CollisionState::Enter = self.trigger_zones[0].state {
       self.score_system.die();
       if self.score_system.lives < 0 {
-        self.score_system.reset();
+        self.reset();
       }
     }
   }
@@ -123,6 +125,14 @@ impl Game {
 
     for line in self.lines.iter() {
       draw_line_vec(line.0, line.1, 3.0, WHITE);
+    }
+  }
+
+  pub fn reset(&mut self) {
+    self.ball = Ball::new(Vec2::new(735.0, 300.0), Vec2::new(0.0, 0.0));
+    self.score_system.reset();
+    for bumper in self.bumpers.iter_mut() {
+      bumper.reset();
     }
   }
 }

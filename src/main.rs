@@ -41,7 +41,7 @@ async fn main() {
     game.update(dt);
     game.draw();
 
-    draw_text("[V0.18]", 0.0, 20.0, 30.0, WHITE);
+    draw_text("[V0.19]", 0.0, 20.0, 30.0, WHITE);
 
     set_default_camera();
 

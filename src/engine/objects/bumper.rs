@@ -87,6 +87,14 @@ impl Bumper {
     }
   }
 
+  pub fn reset(&mut self) {
+    self.disabled = false;
+    self.triggered = false;
+    if let BumperType::Orange = self.effect_type {
+      self.score = ScoreType::Points(1000);
+    }
+  }
+
   pub fn draw(&self, assets: &Assets) {
     match self.effect_type {
       BumperType::Blue => {
