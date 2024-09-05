@@ -1,6 +1,7 @@
 use macroquad::prelude::*;
 
 use super::Ball;
+use crate::game::ScoreType;
 use crate::Assets;
 
 pub enum BumperType {
@@ -14,6 +15,7 @@ pub struct Bumper {
   pub pos: Vec2,
   texture: Texture2D,
   effect_type: BumperType,
+  score: ScoreType,
   pub strength: f32,
   pub radius: f32,
   pub disabled: bool,
@@ -27,6 +29,20 @@ impl Bumper {
     let texture = Texture2D::empty();
     texture.set_filter(FilterMode::Nearest);
 
+    let animation_length = match &effect_type {
+      BumperType::Blue => assets.bumper_blue.animation_length,
+      BumperType::White => assets.bumper_white.animation_length,
+      BumperType::Pink => assets.bumper_pink.animation_length,
+      BumperType::Orange => assets.bumper_orange.animation_length,
+    };
+
+    let score = match &effect_type {
+      BumperType::Blue => ScoreType::Points(250),
+      BumperType::White => ScoreType::Points(100),
+      BumperType::Pink => ScoreType::Multiplier(2.0),
+      BumperType::Orange => ScoreType::Points(1000),
+    };
+
     Self {
       pos,
       texture: assets.create_bumper_texture(),
@@ -35,12 +51,8 @@ impl Bumper {
       disabled: false,
       triggered: false,
       animation_frame: 0,
-      animation_length: match &effect_type {
-        BumperType::Blue => assets.bumper_blue.animation_length,
-        BumperType::White => assets.bumper_white.animation_length,
-        BumperType::Pink => assets.bumper_pink.animation_length,
-        BumperType::Orange => assets.bumper_orange.animation_length,
-      },
+      animation_length,
+      score,
       effect_type,
     }
   }
@@ -52,6 +64,7 @@ impl Bumper {
 
     if let BumperType::Orange = self.effect_type {
       self.strength = 0.0;
+      self.score = ScoreType::SetMulti(-1.0);
     }
   }
 
@@ -109,9 +122,9 @@ impl Bumper {
   }
 }
 
-pub fn ball_to_bumper(ball: &mut Ball, bumper: &mut Bumper) -> i32 {
+pub fn ball_to_bumper(ball: &mut Ball, bumper: &mut Bumper) -> Option<ScoreType> {
   if bumper.disabled {
-    return 0;
+    return None;
   }
 
   let distance = (ball.pos - bumper.pos).length();
@@ -122,10 +135,11 @@ pub fn ball_to_bumper(ball: &mut Ball, bumper: &mut Bumper) -> i32 {
     ball.pos += normal * overlap;
     ball.velocity = normal * bumper.strength;
 
+    let score = bumper.score.clone();
     bumper.hit();
 
-    return bumper.strength as i32;
+    return Some(score);
   }
 
-  return 0;
+  return None;
 }

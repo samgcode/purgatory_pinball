@@ -22,6 +22,7 @@ impl TriggerZone {
     }
   }
 
+  #[allow(dead_code)]
   pub fn draw(&self) {
     draw_rectangle_lines(
       self.bounds.0.x,

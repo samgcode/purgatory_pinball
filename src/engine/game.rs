@@ -1,5 +1,10 @@
 use crate::engine::*;
 
+mod score;
+
+use score::ScoreSystem;
+pub use score::ScoreType;
+
 const GRAVITY: Vec2 = Vec2::new(0.0, 400.0);
 
 pub struct Game {
@@ -10,9 +15,7 @@ pub struct Game {
   bumpers: Vec<Bumper>,
   lines: Vec<(Vec2, Vec2)>,
   trigger_zones: Vec<TriggerZone>,
-
-  score: i32,
-  lives: i32,
+  score_system: ScoreSystem,
 }
 
 impl Game {
@@ -52,6 +55,8 @@ impl Game {
       Vec2::new(625.0, 20.0),
     )];
 
+    let score_system = ScoreSystem::new();
+
     return Self {
       assets,
       ball,
@@ -59,8 +64,7 @@ impl Game {
       bumpers,
       trigger_zones,
       lines,
-      score: 0,
-      lives: 3,
+      score_system,
     };
   }
 
@@ -82,7 +86,10 @@ impl Game {
     physics::ball_to_flipper(&mut self.ball, &self.flipper.1);
 
     for bumper in self.bumpers.iter_mut() {
-      self.score += bumper::ball_to_bumper(&mut self.ball, bumper);
+      let score = bumper::ball_to_bumper(&mut self.ball, bumper);
+      if let Some(score) = score {
+        self.score_system.apply_score(score);
+      }
     }
 
     for line in self.lines.iter() {
@@ -94,12 +101,9 @@ impl Game {
     }
 
     if let CollisionState::Enter = self.trigger_zones[0].state {
-      self.lives -= 1;
-      if self.lives < 0 {
-        println!("score: {}", self.score);
-
-        self.lives = 3;
-        self.score = 0;
+      self.score_system.die();
+      if self.score_system.lives < 0 {
+        self.score_system.reset();
       }
     }
   }
@@ -107,20 +111,7 @@ impl Game {
   pub fn draw(&mut self) {
     // draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
 
-    draw_text(
-      format!("score: {}", self.score).as_str(),
-      200.0,
-      20.0,
-      30.0,
-      WHITE,
-    );
-    draw_text(
-      format!("lives: {}", self.lives).as_str(),
-      500.0,
-      20.0,
-      30.0,
-      WHITE,
-    );
+    self.score_system.draw();
 
     self.ball.draw();
     self.flipper.0.draw();

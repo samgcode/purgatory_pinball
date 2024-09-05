@@ -1,8 +1,6 @@
 # TODO List
 
-- [ ] bumper cooldown
-- [x] add trigger zones
-  - [x] ball zone collision
+- [x] better score system
 - [ ] better debug
   - [ ] pause
   - [ ] show hitboxes
@@ -13,3 +11,4 @@
 # Bugs
 
 - [ ] ball sticks to the bottom of flippers sometimes
+- [ ] orange bumpers don't reset ever
