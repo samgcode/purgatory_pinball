@@ -19,7 +19,7 @@ impl Game {
   pub async fn init() -> Self {
     let assets = load_assets().await;
 
-    let ball = Ball::new(Vec2::new(725.0, 300.0), Vec2::new(0.0, 0.0));
+    let ball = Ball::new(Vec2::new(735.0, 300.0), Vec2::new(0.0, 0.0));
     let flipper = (
       Flipper::new(Vec2::new(200.0, 450.0), 100.0, false),
       Flipper::new(Vec2::new(500.0, 450.0), 100.0, true),
@@ -27,7 +27,7 @@ impl Game {
     let bumpers = vec![
       Bumper::new(Vec2::new(730.0, 740.0), 780.0, &assets, BumperType::Pink),
       Bumper::new(Vec2::new(535.0, 300.0), 600.0, &assets, BumperType::Pink),
-      Bumper::new(Vec2::new(400.0, 250.0), 150.0, &assets, BumperType::White),
+      Bumper::new(Vec2::new(360.0, 250.0), 150.0, &assets, BumperType::Orange),
       Bumper::new(Vec2::new(150.0, 250.0), 150.0, &assets, BumperType::White),
       Bumper::new(Vec2::new(300.0, 150.0), 500.0, &assets, BumperType::Blue),
       Bumper::new(Vec2::new(250.0, 375.0), 500.0, &assets, BumperType::Blue),
@@ -82,7 +82,7 @@ impl Game {
     physics::ball_to_flipper(&mut self.ball, &self.flipper.1);
 
     for bumper in self.bumpers.iter_mut() {
-      self.score += physics::ball_to_bumper(&mut self.ball, bumper);
+      self.score += bumper::ball_to_bumper(&mut self.ball, bumper);
     }
 
     for line in self.lines.iter() {
