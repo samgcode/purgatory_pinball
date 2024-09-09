@@ -7,14 +7,15 @@ const MAX_ANGLE_REV: f32 = 200.0;
 
 const DEG_TO_RAD: f32 = std::f32::consts::PI / 180.0;
 
-const SPEED: f32 = -300.0;
-const RETRACT_SPEED: f32 = 200.0;
+const SPEED: f32 = 8.0;
+const RETRACT_SPEED: f32 = 6.0;
 
 pub struct Flipper {
   pub anchor: Vec2,
   pub length: f32,
   pub tip: Vec2,
   pub angle: f32,
+  position: f32,
   pub vel: f32,
   reversed: bool,
 }
@@ -25,58 +26,39 @@ impl Flipper {
       anchor,
       length,
       tip: anchor + Vec2::new(length, 0.0),
-      angle: if reversed { MIN_ANGLE_REV } else { MIN_ANGLE },
+      angle: 0.0,
+      position: 0.0,
       vel: 0.0,
       reversed,
     }
   }
 
-  pub fn update(&mut self) {
-    if is_key_pressed(KeyCode::A) {
-      if self.reversed {
-        if self.angle < MAX_ANGLE_REV {
-          self.vel = SPEED;
-        }
+  pub fn update(&mut self, dt: f32) {
+    if is_key_down(KeyCode::A) {
+      if self.position < 1.0 {
+        self.position += SPEED * dt;
+        self.vel = -lerp(SPEED * dt, MIN_ANGLE_REV, MAX_ANGLE_REV) * 2.0;
       } else {
-        if self.angle > MAX_ANGLE {
-          self.vel = SPEED;
-        }
+        self.position = 1.0;
+        self.vel = 0.0;
+      }
+    } else {
+      if self.position > 0.0 {
+        self.position -= RETRACT_SPEED * dt;
+        self.vel = -lerp(RETRACT_SPEED * dt, MIN_ANGLE_REV, MAX_ANGLE_REV) * 2.0;
+      } else {
+        self.position = 0.0;
+        self.vel = 0.0;
       }
     }
   }
 
-  pub fn fixed_update(&mut self, dt: f32) {
-    if self.reversed {
-      if self.vel == SPEED {
-        if self.angle > MAX_ANGLE_REV {
-          self.vel = 0.0;
-        }
-      } else {
-        if self.angle > MIN_ANGLE_REV {
-          self.vel = RETRACT_SPEED;
-        } else {
-          self.vel = 0.0;
-        }
-      }
+  pub fn fixed_update(&mut self, _dt: f32) {
+    self.angle = if self.reversed {
+      lerp(self.position, MIN_ANGLE_REV, MAX_ANGLE_REV)
     } else {
-      if self.vel == SPEED {
-        if self.angle < MAX_ANGLE {
-          self.vel = 0.0;
-        }
-      } else {
-        if self.angle < MIN_ANGLE {
-          self.vel = RETRACT_SPEED;
-        } else {
-          self.vel = 0.0;
-        }
-      }
-    }
-
-    if self.reversed {
-      self.angle -= self.vel * dt;
-    } else {
-      self.angle += self.vel * dt;
-    }
+      lerp(self.position, MIN_ANGLE, MAX_ANGLE)
+    };
 
     self.tip = self.anchor
       + Vec2 {
@@ -95,4 +77,8 @@ impl Flipper {
       Color::new(1.0, 1.0, 1.0, 1.0),
     );
   }
+}
+
+pub fn lerp(t: f32, a: f32, b: f32) -> f32 {
+  return a + (b - a) * t;
 }

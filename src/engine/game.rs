@@ -53,7 +53,7 @@ impl Game {
     ];
 
     let trigger_zones = vec![TriggerZone::new(
-      Vec2::new(50.0, 540.0),
+      Vec2::new(50.0, 560.0),
       Vec2::new(615.0, 20.0),
     )];
 
@@ -70,9 +70,13 @@ impl Game {
     };
   }
 
-  pub fn update(&mut self, _dt: f32) {
-    self.flipper.0.update();
-    self.flipper.1.update();
+  pub fn update(&mut self, dt: f32) {
+    self.flipper.0.update(dt);
+    self.flipper.1.update(dt);
+
+    if is_key_pressed(KeyCode::R) {
+      self.reset();
+    }
   }
 
   pub fn fixed_update(&mut self, fixed_dt: f32) {
