@@ -55,7 +55,12 @@ fn index_2d(arr: &[[u8; levels::WIDTH]; levels::HEIGHT], i: i32, j: i32, default
   if i < 0 || i >= arr.len() as i32 || j < 0 || j >= arr[i as usize].len() as i32 {
     return default;
   }
-  return arr[i as usize][j as usize];
+
+  let a = arr[i as usize][j as usize];
+  if a == 2 || a == 3 {
+    return 1;
+  }
+  return a;
 }
 
 fn match_rule(ti: usize, square: [[u8; 3]; 3]) -> bool {

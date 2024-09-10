@@ -37,13 +37,13 @@ impl Board {
     map_texture.set_filter(FilterMode::Nearest);
 
     let mut walls = Vec::new();
+    let scale = 8.0 * SCALE;
     for y in 0..LEVEL_0.len() {
       for x in 0..LEVEL_0[y].len() {
         if LEVEL_0[y][x] == 0 {
           if x < 1 || y < 1 || x >= WIDTH as usize || y >= HEIGHT as usize {
             continue;
           }
-          let scale = 8.0 * SCALE;
           if LEVEL_0[y - 1][x] == 1 {
             let x = x as f32 * scale + CENTER_OFFSET;
             let y = y as f32 * scale;
@@ -64,6 +64,14 @@ impl Board {
             let y = y as f32 * scale;
             walls.push((Vec2::new(x + scale, y), Vec2::new(x + scale, y + scale)));
           }
+        } else if LEVEL_0[y][x] == 2 {
+          let x = x as f32 * scale + CENTER_OFFSET;
+          let y = y as f32 * scale;
+          walls.push((Vec2::new(x + scale, y), Vec2::new(x, y + scale)));
+        } else if LEVEL_0[y][x] == 3 {
+          let x = x as f32 * scale + CENTER_OFFSET;
+          let y = y as f32 * scale;
+          walls.push((Vec2::new(x, y), Vec2::new(x + scale, y + scale)));
         }
       }
     }
@@ -87,7 +95,7 @@ impl Board {
     );
 
     for line in self.walls.iter() {
-      draw_line(line.0.x, line.0.y, line.1.x, line.1.y, 2.0, RED)
+      draw_line(line.0.x, line.0.y, line.1.x, line.1.y, 4.0, RED)
     }
   }
 }
