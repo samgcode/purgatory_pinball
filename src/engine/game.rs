@@ -9,7 +9,7 @@ pub use score::ScoreType;
 const GRAVITY: Vec2 = Vec2::new(0.0, 400.0);
 
 pub struct Game {
-  assets: Assets,
+  _assets: Assets,
 
   ball: Ball,
   flipper: (Flipper, Flipper),
@@ -25,7 +25,7 @@ impl Game {
   pub async fn init() -> Self {
     let assets = load_assets().await;
 
-    let ball = Ball::new(Vec2::new(735.0, 300.0), Vec2::new(0.0, 0.0));
+    let ball = Ball::new(Vec2::new(975.0, 300.0), Vec2::new(0.0, 0.0));
     let flipper = (
       Flipper::new(Vec2::new(200.0, 450.0), 100.0, false),
       Flipper::new(Vec2::new(500.0, 450.0), 100.0, true),
@@ -65,7 +65,7 @@ impl Game {
     let board = Board::new(&assets);
 
     return Self {
-      assets,
+      _assets: assets,
       ball,
       flipper,
       bumpers,
@@ -94,30 +94,33 @@ impl Game {
       bumper.fixed_update();
     }
 
-    physics::ball_to_flipper(&mut self.ball, &self.flipper.0);
-    physics::ball_to_flipper(&mut self.ball, &self.flipper.1);
-
-    for bumper in self.bumpers.iter_mut() {
-      let score = bumper::ball_to_bumper(&mut self.ball, bumper);
-      if let Some(score) = score {
-        self.score_system.apply_score(score);
-      }
+    for wall in self.board.walls.iter() {
+      physics::ball_to_line(&mut self.ball, *wall);
     }
+    // physics::ball_to_flipper(&mut self.ball, &self.flipper.0);
+    // physics::ball_to_flipper(&mut self.ball, &self.flipper.1);
 
-    for line in self.lines.iter() {
-      physics::ball_to_line(&mut self.ball, *line);
-    }
+    // for bumper in self.bumpers.iter_mut() {
+    //   let score = bumper::ball_to_bumper(&mut self.ball, bumper);
+    //   if let Some(score) = score {
+    //     self.score_system.apply_score(score);
+    //   }
+    // }
 
-    for zone in self.trigger_zones.iter_mut() {
-      physics::ball_trigger_zone(&mut self.ball, zone);
-    }
+    // for line in self.lines.iter() {
+    //   physics::ball_to_line(&mut self.ball, *line);
+    // }
 
-    if let CollisionState::Enter = self.trigger_zones[0].state {
-      self.score_system.die();
-      if self.score_system.lives < 0 {
-        self.reset();
-      }
-    }
+    // for zone in self.trigger_zones.iter_mut() {
+    //   physics::ball_trigger_zone(&mut self.ball, zone);
+    // }
+
+    // if let CollisionState::Enter = self.trigger_zones[0].state {
+    //   self.score_system.die();
+    //   if self.score_system.lives < 0 {
+    //     self.reset();
+    //   }
+    // }
   }
 
   pub fn draw(&mut self) {
@@ -126,7 +129,7 @@ impl Game {
 
     // self.score_system.draw();
 
-    // self.ball.draw();
+    self.ball.draw();
     // self.flipper.0.draw();
     // self.flipper.1.draw();
 

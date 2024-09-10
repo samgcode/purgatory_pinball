@@ -5,7 +5,7 @@ use tile_rules::TILE_RULES;
 
 mod tile_rules;
 
-const OOB: u8 = 0;
+const OOB: u8 = 1;
 
 pub struct Tileset {
   pub sprites: Vec<Image>,
