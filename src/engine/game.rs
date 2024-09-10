@@ -7,8 +7,8 @@ pub use score::ScoreType;
 
 const GRAVITY: Vec2 = Vec2::new(0.0, 400.0);
 
-const WIDTH: usize = 8;
-const HEIGHT: usize = 10;
+const WIDTH: usize = 9;
+const HEIGHT: usize = 16;
 
 pub struct Game {
   assets: Assets,
@@ -65,16 +65,22 @@ impl Game {
     let score_system = ScoreSystem::new();
 
     let tiles = assets.tileset.get_tiles_from_map(&vec![
-      vec![0, 0, 0, 0, 0, 0, 0, 0],
-      vec![0, 0, 0, 0, 0, 0, 0, 0],
-      vec![0, 0, 1, 1, 1, 0, 0, 0],
-      vec![0, 0, 0, 0, 0, 0, 0, 0],
-      vec![0, 0, 0, 0, 1, 1, 0, 0],
-      vec![0, 0, 0, 0, 0, 1, 0, 0],
-      vec![0, 0, 0, 0, 1, 1, 1, 0],
-      vec![0, 0, 0, 0, 0, 1, 0, 0],
-      vec![0, 0, 0, 0, 0, 0, 0, 0],
-      vec![0, 0, 0, 0, 0, 0, 0, 0],
+      vec![1, 1, 1, 1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 0, 0, 0, 0, 0, 1],
+      vec![1, 1, 1, 1, 1, 0, 0, 1, 1],
+      vec![1, 1, 1, 1, 1, 1, 0, 1, 1],
+      vec![1, 1, 1, 1, 1, 0, 0, 1, 1],
+      vec![1, 1, 0, 1, 1, 1, 0, 0, 1],
+      vec![1, 0, 1, 0, 1, 1, 0, 1, 1],
+      vec![1, 1, 0, 1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1, 1, 1, 1],
+      vec![1, 1, 0, 1, 1, 1, 1, 1, 1],
+      vec![1, 0, 1, 0, 1, 1, 1, 1, 1],
+      vec![1, 0, 1, 0, 0, 1, 0, 0, 1],
+      vec![1, 1, 1, 1, 1, 0, 0, 0, 1],
+      vec![1, 0, 1, 0, 0, 1, 0, 0, 1],
+      vec![1, 1, 1, 1, 1, 1, 1, 1, 1],
+      vec![1, 1, 1, 1, 1, 1, 1, 1, 1],
     ]);
 
     let mut map_bytes: [u8; WIDTH * HEIGHT * 64 * 4] = [0; WIDTH * HEIGHT * 64 * 4];
@@ -157,33 +163,33 @@ impl Game {
   pub fn draw(&mut self) {
     // draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
 
-    self.score_system.draw();
+    // self.score_system.draw();
 
-    self.ball.draw();
-    self.flipper.0.draw();
-    self.flipper.1.draw();
+    // self.ball.draw();
+    // self.flipper.0.draw();
+    // self.flipper.1.draw();
 
-    for bumper in self.bumpers.iter_mut() {
-      bumper.draw(&self.assets);
-    }
+    // for bumper in self.bumpers.iter_mut() {
+    //   bumper.draw(&self.assets);
+    // }
 
-    for line in self.lines.iter() {
-      draw_line_vec(line.0, line.1, 3.0, WHITE);
-    }
+    // for line in self.lines.iter() {
+    //   draw_line_vec(line.0, line.1, 3.0, WHITE);
+    // }
 
-    // draw_texture_ex(
-    //   &self.map_texture,
-    //   0.0,
-    //   0.0,
-    //   WHITE,
-    //   DrawTextureParams {
-    //     dest_size: Some(Vec2::new(
-    //       self.map_texture.width() * 8.0,
-    //       self.map_texture.height() * 8.0,
-    //     )),
-    //     ..Default::default()
-    //   },
-    // );
+    draw_texture_ex(
+      &self.map_texture,
+      0.0,
+      0.0,
+      WHITE,
+      DrawTextureParams {
+        dest_size: Some(Vec2::new(
+          self.map_texture.width() * 8.0,
+          self.map_texture.height() * 8.0,
+        )),
+        ..Default::default()
+      },
+    );
   }
 
   pub fn reset(&mut self) {
