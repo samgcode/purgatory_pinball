@@ -1,15 +1,18 @@
 use macroquad::prelude::*;
 
+use crate::levels;
 use tile_rules::TILE_RULES;
 
 mod tile_rules;
+
+const OOB: u8 = 0;
 
 pub struct Tileset {
   pub sprites: Vec<Image>,
 }
 
 impl Tileset {
-  pub fn get_tiles_from_map(&self, map: &Vec<Vec<u8>>) -> Vec<Vec<usize>> {
+  pub fn get_tiles_from_map(&self, map: &[[u8; levels::WIDTH]; levels::HEIGHT]) -> Vec<Vec<usize>> {
     let mut tiles = Vec::new();
 
     for i in 0..map.len() {
@@ -18,19 +21,19 @@ impl Tileset {
         for t in 0..TILE_RULES.len() {
           let square = [
             [
-              index_2d(map, i as i32 - 1, j as i32 - 1, 1),
-              index_2d(map, i as i32 - 1, j as i32, 1),
-              index_2d(map, i as i32 - 1, j as i32 + 1, 1),
+              index_2d(map, i as i32 - 1, j as i32 - 1, OOB),
+              index_2d(map, i as i32 - 1, j as i32, OOB),
+              index_2d(map, i as i32 - 1, j as i32 + 1, OOB),
             ],
             [
-              index_2d(map, i as i32, j as i32 - 1, 1),
-              index_2d(map, i as i32, j as i32, 1),
-              index_2d(map, i as i32, j as i32 + 1, 1),
+              index_2d(map, i as i32, j as i32 - 1, OOB),
+              index_2d(map, i as i32, j as i32, OOB),
+              index_2d(map, i as i32, j as i32 + 1, OOB),
             ],
             [
-              index_2d(map, i as i32 + 1, j as i32 - 1, 1),
-              index_2d(map, i as i32 + 1, j as i32, 1),
-              index_2d(map, i as i32 + 1, j as i32 + 1, 1),
+              index_2d(map, i as i32 + 1, j as i32 - 1, OOB),
+              index_2d(map, i as i32 + 1, j as i32, OOB),
+              index_2d(map, i as i32 + 1, j as i32 + 1, OOB),
             ],
           ];
 
@@ -48,7 +51,7 @@ impl Tileset {
   }
 }
 
-fn index_2d(arr: &Vec<Vec<u8>>, i: i32, j: i32, default: u8) -> u8 {
+fn index_2d(arr: &[[u8; levels::WIDTH]; levels::HEIGHT], i: i32, j: i32, default: u8) -> u8 {
   if i < 0 || i >= arr.len() as i32 || j < 0 || j >= arr[i as usize].len() as i32 {
     return default;
   }
