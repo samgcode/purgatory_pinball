@@ -3,12 +3,14 @@ use macroquad::prelude::*;
 pub use bumper::BumperSprite;
 
 mod bumper;
+mod tileset;
 
 macro_rules! include_image {
   ( $x:expr ) => {
     Image::from_file_with_format(include_bytes!($x), None).unwrap()
   };
 }
+
 macro_rules! include_bumper {
   ( $x:expr, $y:expr ) => {
     BumperSprite {
@@ -35,11 +37,73 @@ macro_rules! include_bumper {
   };
 }
 
+macro_rules! include_tileset {
+  ( ) => {
+    tileset::Tileset {
+      sprites: vec![
+        include_image!(concat!("../assets/tiles/solid/0.png")),
+        include_image!(concat!("../assets/tiles/solid/15.png")),
+        // include_image!(concat!("../assets/tiles/solid/0.png")),
+        // include_image!(concat!("../assets/tiles/solid/1.png")),
+        // include_image!(concat!("../assets/tiles/solid/2.png")),
+        // include_image!(concat!("../assets/tiles/solid/3.png")),
+        // include_image!(concat!("../assets/tiles/solid/4.png")),
+        // include_image!(concat!("../assets/tiles/solid/5.png")),
+        // include_image!(concat!("../assets/tiles/solid/6.png")),
+        // include_image!(concat!("../assets/tiles/solid/7.png")),
+        // include_image!(concat!("../assets/tiles/solid/8.png")),
+        // include_image!(concat!("../assets/tiles/solid/9.png")),
+        // include_image!(concat!("../assets/tiles/solid/10.png")),
+        // include_image!(concat!("../assets/tiles/solid/11.png")),
+        // include_image!(concat!("../assets/tiles/solid/12.png")),
+        // include_image!(concat!("../assets/tiles/solid/13.png")),
+        // include_image!(concat!("../assets/tiles/solid/14.png")),
+        // include_image!(concat!("../assets/tiles/solid/15.png")),
+        // include_image!(concat!("../assets/tiles/corner/0.png")),
+        // include_image!(concat!("../assets/tiles/corner/1.png")),
+        // include_image!(concat!("../assets/tiles/corner/2.png")),
+        // include_image!(concat!("../assets/tiles/corner/3.png")),
+        // include_image!(concat!("../assets/tiles/corner/4.png")),
+        // include_image!(concat!("../assets/tiles/corner/5.png")),
+        // include_image!(concat!("../assets/tiles/corner/6.png")),
+        // include_image!(concat!("../assets/tiles/corner/7.png")),
+        // include_image!(concat!("../assets/tiles/corner/8.png")),
+        // include_image!(concat!("../assets/tiles/corner/9.png")),
+        // include_image!(concat!("../assets/tiles/corner/10.png")),
+        // include_image!(concat!("../assets/tiles/corner/11.png")),
+        // include_image!(concat!("../assets/tiles/corner/12.png")),
+        // include_image!(concat!("../assets/tiles/corner/13.png")),
+        // include_image!(concat!("../assets/tiles/corner/14.png")),
+        // include_image!(concat!("../assets/tiles/slope/0.png")),
+        // include_image!(concat!("../assets/tiles/slope/1.png")),
+        // include_image!(concat!("../assets/tiles/slope/2.png")),
+        // include_image!(concat!("../assets/tiles/slope/3.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/0.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/1.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/2.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/3.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/4.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/5.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/6.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/7.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/8.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/9.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/10.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/11.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/12.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/13.png")),
+        // include_image!(concat!("../assets/tiles/slope_corner/14.png")),
+      ],
+    }
+  };
+}
+
 pub struct Assets {
   pub bumper_blue: BumperSprite,
   pub bumper_white: BumperSprite,
   pub bumper_pink: BumperSprite,
   pub bumper_orange: BumperSprite,
+  pub tileset: tileset::Tileset,
 }
 
 pub async fn load_assets() -> Assets {
@@ -48,11 +112,14 @@ pub async fn load_assets() -> Assets {
   let bumper_pink = include_bumper!("mayaBumperGreen", "green");
   let bumper_orange = include_bumper!("mayaBumperOrange", "orange");
 
+  let tileset = include_tileset!();
+
   return Assets {
     bumper_blue,
     bumper_white,
     bumper_pink,
     bumper_orange,
+    tileset,
   };
 }
 

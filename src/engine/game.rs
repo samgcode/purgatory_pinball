@@ -7,6 +7,9 @@ pub use score::ScoreType;
 
 const GRAVITY: Vec2 = Vec2::new(0.0, 400.0);
 
+const WIDTH: usize = 8;
+const HEIGHT: usize = 10;
+
 pub struct Game {
   assets: Assets,
 
@@ -16,6 +19,8 @@ pub struct Game {
   lines: Vec<(Vec2, Vec2)>,
   trigger_zones: Vec<TriggerZone>,
   score_system: ScoreSystem,
+
+  map_texture: Texture2D,
 }
 
 impl Game {
@@ -59,6 +64,40 @@ impl Game {
 
     let score_system = ScoreSystem::new();
 
+    let tiles = assets.tileset.get_tiles_from_map(&vec![
+      vec![0, 0, 0, 0, 0, 0, 0, 0],
+      vec![0, 0, 0, 0, 0, 0, 0, 0],
+      vec![0, 0, 1, 1, 1, 0, 0, 0],
+      vec![0, 0, 0, 0, 0, 0, 0, 0],
+      vec![0, 0, 0, 0, 1, 1, 0, 0],
+      vec![0, 0, 0, 0, 0, 1, 0, 0],
+      vec![0, 0, 0, 0, 1, 1, 1, 0],
+      vec![0, 0, 0, 0, 0, 1, 0, 0],
+      vec![0, 0, 0, 0, 0, 0, 0, 0],
+      vec![0, 0, 0, 0, 0, 0, 0, 0],
+    ]);
+
+    let mut map_bytes: [u8; WIDTH * HEIGHT * 64 * 4] = [0; WIDTH * HEIGHT * 64 * 4];
+
+    for i in 0..WIDTH {
+      for j in 0..HEIGHT {
+        let tile = assets.tileset.sprites[tiles[j][i]].get_image_data();
+        for k in tile.iter().enumerate() {
+          let x = i * 8 + k.0 % 8;
+          let y = j * 8 + k.0 / 8;
+          let index = (x + y * WIDTH * 8) * 4;
+
+          map_bytes[index + 0] = k.1[0];
+          map_bytes[index + 1] = k.1[1];
+          map_bytes[index + 2] = k.1[2];
+          map_bytes[index + 3] = k.1[3];
+        }
+      }
+    }
+
+    let map_texture = Texture2D::from_rgba8((WIDTH * 8) as u16, (HEIGHT * 8) as u16, &map_bytes);
+    map_texture.set_filter(FilterMode::Nearest);
+
     return Self {
       assets,
       ball,
@@ -67,6 +106,7 @@ impl Game {
       trigger_zones,
       lines,
       score_system,
+      map_texture,
     };
   }
 
@@ -130,6 +170,20 @@ impl Game {
     for line in self.lines.iter() {
       draw_line_vec(line.0, line.1, 3.0, WHITE);
     }
+
+    // draw_texture_ex(
+    //   &self.map_texture,
+    //   0.0,
+    //   0.0,
+    //   WHITE,
+    //   DrawTextureParams {
+    //     dest_size: Some(Vec2::new(
+    //       self.map_texture.width() * 8.0,
+    //       self.map_texture.height() * 8.0,
+    //     )),
+    //     ..Default::default()
+    //   },
+    // );
   }
 
   pub fn reset(&mut self) {
