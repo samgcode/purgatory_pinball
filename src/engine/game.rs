@@ -14,8 +14,7 @@ pub struct Game {
   ball: Ball,
   flipper: (Flipper, Flipper),
   bumpers: Vec<Bumper>,
-  lines: Vec<(Vec2, Vec2)>,
-  trigger_zones: Vec<TriggerZone>,
+  lose_zone: TriggerZone,
   score_system: ScoreSystem,
 
   board: Board,
@@ -27,8 +26,8 @@ impl Game {
 
     let ball = Ball::new(Vec2::new(975.0, 300.0), Vec2::new(0.0, 0.0));
     let flipper = (
-      Flipper::new(Vec2::new(200.0, 450.0), 100.0, false),
-      Flipper::new(Vec2::new(500.0, 450.0), 100.0, true),
+      Flipper::new(Vec2::new(700.0, 890.0), 150.0, false),
+      Flipper::new(Vec2::new(1125.0, 890.0), 150.0, true),
     );
     let bumpers = vec![
       Bumper::new(Vec2::new(730.0, 740.0), 780.0, &assets, BumperType::Pink),
@@ -40,25 +39,7 @@ impl Game {
       Bumper::new(Vec2::new(630.0, 150.0), 500.0, &assets, BumperType::Blue),
     ];
 
-    let lines = vec![
-      (Vec2::new(50.0, 50.0), Vec2::new(750.0, 50.0)), // top wall
-      (Vec2::new(50.0, 50.0), Vec2::new(50.0, 620.0)), // left wall
-      (Vec2::new(50.0, 620.0), Vec2::new(700.0, 700.0)), // bottom wall
-      (Vec2::new(700.0, 50.0), Vec2::new(750.0, 100.0)), // the booper
-      //
-      (Vec2::new(750.0, 50.0), Vec2::new(750.0, 700.0)), // right wall
-      (Vec2::new(675.0, 150.0), Vec2::new(675.0, 650.0)), // channel wall
-      //
-      (Vec2::new(50.0, 300.0), Vec2::new(200.0, 450.0)), // left ramp
-      (Vec2::new(50.0, 475.0), Vec2::new(250.0, 500.0)),
-      (Vec2::new(675.0, 300.0), Vec2::new(500.0, 450.0)), // right ramp
-      (Vec2::new(675.0, 475.0), Vec2::new(450.0, 500.0)), // right ramp
-    ];
-
-    let trigger_zones = vec![TriggerZone::new(
-      Vec2::new(50.0, 560.0),
-      Vec2::new(615.0, 20.0),
-    )];
+    let lose_zone = TriggerZone::new(Vec2::new(625.0, 950.0), Vec2::new(615.0, 20.0));
 
     let score_system = ScoreSystem::new();
 
@@ -69,8 +50,7 @@ impl Game {
       ball,
       flipper,
       bumpers,
-      trigger_zones,
-      lines,
+      lose_zone,
       score_system,
       board,
     };
@@ -97,8 +77,8 @@ impl Game {
     for wall in self.board.walls.iter() {
       physics::ball_to_line(&mut self.ball, *wall);
     }
-    // physics::ball_to_flipper(&mut self.ball, &self.flipper.0);
-    // physics::ball_to_flipper(&mut self.ball, &self.flipper.1);
+    physics::ball_to_flipper(&mut self.ball, &self.flipper.0);
+    physics::ball_to_flipper(&mut self.ball, &self.flipper.1);
 
     // for bumper in self.bumpers.iter_mut() {
     //   let score = bumper::ball_to_bumper(&mut self.ball, bumper);
@@ -107,13 +87,7 @@ impl Game {
     //   }
     // }
 
-    // for line in self.lines.iter() {
-    //   physics::ball_to_line(&mut self.ball, *line);
-    // }
-
-    // for zone in self.trigger_zones.iter_mut() {
-    //   physics::ball_trigger_zone(&mut self.ball, zone);
-    // }
+    physics::ball_trigger_zone(&mut self.ball, &mut self.lose_zone);
 
     // if let CollisionState::Enter = self.trigger_zones[0].state {
     //   self.score_system.die();
@@ -130,16 +104,14 @@ impl Game {
     // self.score_system.draw();
 
     self.ball.draw();
-    // self.flipper.0.draw();
-    // self.flipper.1.draw();
+    self.flipper.0.draw();
+    self.flipper.1.draw();
 
     // for bumper in self.bumpers.iter_mut() {
     //   bumper.draw(&self.assets);
     // }
 
-    // for line in self.lines.iter() {
-    //   draw_line_vec(line.0, line.1, 3.0, WHITE);
-    // }
+    self.lose_zone.draw();
   }
 
   pub fn reset(&mut self) {

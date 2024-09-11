@@ -1,13 +1,13 @@
 # TODO List
 
-- [ ] better debug
-  - [ ] pause
-  - [ ] show hitboxes
-  - [ ] show triggers
-  - [ ] frame stepper
-- [ ]
+- [ ] make proper map
+- [ ] add bumpers
+- [x] add flippers
+  - [ ] change input
+- [ ] fix scale of sprites
+- [ ] add second layer
+- [ ] more physics steps
 
 # Bugs
 
 - [ ] ball sticks to the bottom of flippers sometimes
-- [x] orange bumpers don't reset ever
