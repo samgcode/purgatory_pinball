@@ -113,8 +113,8 @@ impl Board {
       },
     );
 
-    for line in self.walls.iter() {
-      draw_line(line.0.x, line.0.y, line.1.x, line.1.y, 4.0, GREEN)
-    }
+    // for line in self.walls.iter() {
+    //   draw_line(line.0.x, line.0.y, line.1.x, line.1.y, 4.0, GREEN)
+    // }
   }
 }

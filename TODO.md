@@ -1,10 +1,7 @@
 # TODO List
 
-- [x] make proper map
-- [x] add bumpers
 - [ ] fix scale of sprites
 - [ ] add second layer
-- [x] more physics steps
 - [ ] ball sprite
 - [ ] springs
 

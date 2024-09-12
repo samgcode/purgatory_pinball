@@ -31,8 +31,9 @@ impl Game {
     );
     let bumpers = vec![
       Bumper::new(Vec2::new(750.0, 700.0), &assets, BumperType::Orange),
-      Bumper::new(Vec2::new(1000.0, 400.0), &assets, BumperType::Pink),
-      Bumper::new(Vec2::new(1100.0, 250.0), &assets, BumperType::Blue),
+      Bumper::new(Vec2::new(560.0, 110.0), &assets, BumperType::Pink),
+      Bumper::new(Vec2::new(1050.0, 550.0), &assets, BumperType::Pink),
+      Bumper::new(Vec2::new(1150.0, 350.0), &assets, BumperType::Blue),
       Bumper::new(Vec2::new(900.0, 250.0), &assets, BumperType::Blue),
       Bumper::new(Vec2::new(1375.0, 1100.0), &assets, BumperType::White),
     ];
@@ -99,6 +100,10 @@ impl Game {
   }
 
   pub fn draw(&mut self) {
+    for bumper in self.bumpers.iter_mut() {
+      bumper.draw(&self.assets);
+    }
+
     self.board.draw();
     // draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
 
@@ -108,11 +113,7 @@ impl Game {
     self.flipper.0.draw();
     self.flipper.1.draw();
 
-    for bumper in self.bumpers.iter_mut() {
-      bumper.draw(&self.assets);
-    }
-
-    self.lose_zone.draw();
+    // self.lose_zone.draw();
   }
 
   pub fn respawn(&mut self) {
