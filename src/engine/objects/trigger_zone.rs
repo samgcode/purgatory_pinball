@@ -29,7 +29,7 @@ impl TriggerZone {
       self.bounds.0.y,
       self.bounds.1.x - self.bounds.0.x,
       self.bounds.1.y - self.bounds.0.y,
-      2.0,
+      4.0,
       RED,
     )
   }

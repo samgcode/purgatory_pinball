@@ -5,8 +5,8 @@ use crate::game::ScoreType;
 use crate::Assets;
 
 pub enum BumperType {
-  Blue,
   White,
+  Blue,
   Pink,
   Orange,
 }
@@ -25,20 +25,27 @@ pub struct Bumper {
 }
 
 impl Bumper {
-  pub fn new(pos: Vec2, strength: f32, assets: &Assets, effect_type: BumperType) -> Self {
+  pub fn new(pos: Vec2, assets: &Assets, effect_type: BumperType) -> Self {
     let texture = Texture2D::empty();
     texture.set_filter(FilterMode::Nearest);
 
+    let strength = match &effect_type {
+      BumperType::White => 1500.0,
+      BumperType::Blue => 500.0,
+      BumperType::Pink => 1000.0,
+      BumperType::Orange => 500.0,
+    };
+
     let animation_length = match &effect_type {
-      BumperType::Blue => assets.bumper_blue.animation_length,
       BumperType::White => assets.bumper_white.animation_length,
+      BumperType::Blue => assets.bumper_blue.animation_length,
       BumperType::Pink => assets.bumper_pink.animation_length,
       BumperType::Orange => assets.bumper_orange.animation_length,
     };
 
     let score = match &effect_type {
-      BumperType::Blue => ScoreType::Points(250),
       BumperType::White => ScoreType::Points(100),
+      BumperType::Blue => ScoreType::Points(250),
       BumperType::Pink => ScoreType::Multiplier(2.0),
       BumperType::Orange => ScoreType::Points(1000),
     };
@@ -47,7 +54,7 @@ impl Bumper {
       pos,
       texture: assets.create_bumper_texture(),
       strength,
-      radius: 30.0,
+      radius: 50.0,
       disabled: false,
       triggered: false,
       animation_frame: 0,
@@ -97,14 +104,14 @@ impl Bumper {
 
   pub fn draw(&self, assets: &Assets) {
     match self.effect_type {
-      BumperType::Blue => {
-        assets
-          .bumper_blue
-          .draw(&self.texture, self.pos, self.radius, self.animation_frame)
-      }
       BumperType::White => {
         assets
           .bumper_white
+          .draw(&self.texture, self.pos, self.radius, self.animation_frame)
+      }
+      BumperType::Blue => {
+        assets
+          .bumper_blue
           .draw(&self.texture, self.pos, self.radius, self.animation_frame)
       }
       BumperType::Pink => {

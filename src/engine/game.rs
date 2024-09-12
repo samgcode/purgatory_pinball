@@ -24,22 +24,20 @@ impl Game {
   pub async fn init() -> Self {
     let assets = load_assets().await;
 
-    let ball = Ball::new(Vec2::new(975.0, 300.0), Vec2::new(0.0, 0.0));
+    let ball = Ball::new(Vec2::new(1375.0, 300.0), Vec2::new(0.0, 0.0));
     let flipper = (
-      Flipper::new(Vec2::new(700.0, 890.0), 150.0, false),
-      Flipper::new(Vec2::new(1125.0, 890.0), 150.0, true),
+      Flipper::new(Vec2::new(700.0, 990.0), 150.0, false),
+      Flipper::new(Vec2::new(1125.0, 990.0), 150.0, true),
     );
     let bumpers = vec![
-      Bumper::new(Vec2::new(730.0, 740.0), 780.0, &assets, BumperType::Pink),
-      Bumper::new(Vec2::new(535.0, 300.0), 600.0, &assets, BumperType::Pink),
-      Bumper::new(Vec2::new(360.0, 250.0), 150.0, &assets, BumperType::Orange),
-      Bumper::new(Vec2::new(150.0, 250.0), 150.0, &assets, BumperType::White),
-      Bumper::new(Vec2::new(300.0, 150.0), 500.0, &assets, BumperType::Blue),
-      Bumper::new(Vec2::new(250.0, 375.0), 500.0, &assets, BumperType::Blue),
-      Bumper::new(Vec2::new(630.0, 150.0), 500.0, &assets, BumperType::Blue),
+      Bumper::new(Vec2::new(750.0, 700.0), &assets, BumperType::Orange),
+      Bumper::new(Vec2::new(1000.0, 400.0), &assets, BumperType::Pink),
+      Bumper::new(Vec2::new(1100.0, 250.0), &assets, BumperType::Blue),
+      Bumper::new(Vec2::new(900.0, 250.0), &assets, BumperType::Blue),
+      Bumper::new(Vec2::new(1375.0, 1100.0), &assets, BumperType::White),
     ];
 
-    let lose_zone = TriggerZone::new(Vec2::new(625.0, 950.0), Vec2::new(615.0, 20.0));
+    let lose_zone = TriggerZone::new(Vec2::new(500.0, 1100.0), Vec2::new(800.0, 20.0));
 
     let score_system = ScoreSystem::new();
 
@@ -91,12 +89,13 @@ impl Game {
 
     physics::ball_trigger_zone(&mut self.ball, &mut self.lose_zone);
 
-    // if let CollisionState::Enter = self.trigger_zones[0].state {
-    //   self.score_system.die();
-    //   if self.score_system.lives < 0 {
-    //     self.reset();
-    //   }
-    // }
+    if let CollisionState::Enter = self.lose_zone.state {
+      self.score_system.die();
+      self.respawn();
+      if self.score_system.lives < 0 {
+        self.reset();
+      }
+    }
   }
 
   pub fn draw(&mut self) {
@@ -116,8 +115,12 @@ impl Game {
     self.lose_zone.draw();
   }
 
+  pub fn respawn(&mut self) {
+    self.ball = Ball::new(Vec2::new(1375.0, 200.0), Vec2::new(0.0, 0.0));
+  }
+
   pub fn reset(&mut self) {
-    self.ball = Ball::new(Vec2::new(735.0, 300.0), Vec2::new(0.0, 0.0));
+    self.ball = Ball::new(Vec2::new(1375.0, 200.0), Vec2::new(0.0, 0.0));
     self.score_system.reset();
     for bumper in self.bumpers.iter_mut() {
       bumper.reset();
