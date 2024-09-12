@@ -1,7 +1,9 @@
 use macroquad::prelude::*;
 
+pub use ball::BallSprite;
 pub use bumper::BumperSprite;
 
+mod ball;
 mod bumper;
 mod tileset;
 
@@ -117,6 +119,7 @@ pub struct Assets {
   pub bumper_pink: BumperSprite,
   pub bumper_orange: BumperSprite,
   pub tileset: tileset::Tileset,
+  pub ball: ball::BallSprite,
 }
 
 pub async fn load_assets() -> Assets {
@@ -127,12 +130,17 @@ pub async fn load_assets() -> Assets {
 
   let tileset = include_tileset!();
 
+  let ball = BallSprite {
+    sprite: include_image!("../assets/ball.png"),
+  };
+
   return Assets {
     bumper_blue,
     bumper_white,
     bumper_pink,
     bumper_orange,
     tileset,
+    ball,
   };
 }
 

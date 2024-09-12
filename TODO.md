@@ -1,9 +1,8 @@
 # TODO List
 
-- [x] fix score system
 - [ ] fix scale of sprites
 - [ ] add second layer
-- [ ] ball sprite
+- [x] ball sprite
 - [ ] springs
 
 # Bugs

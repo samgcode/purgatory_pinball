@@ -104,6 +104,7 @@ impl Bumper {
     self.disabled = false;
     self.triggered = false;
     if let BumperType::Orange = self.effect_type {
+      self.strength = 500.0;
       self.score = ScoreType::Points(1000);
     }
   }

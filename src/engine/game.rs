@@ -24,7 +24,7 @@ impl Game {
   pub async fn init() -> Self {
     let assets = load_assets().await;
 
-    let ball = Ball::new(Vec2::new(1375.0, 300.0), Vec2::new(0.0, 0.0));
+    let ball = Ball::new(Vec2::new(1375.0, 300.0), Vec2::new(0.0, 0.0), &assets);
     let flipper = (
       Flipper::new(Vec2::new(700.0, 990.0), 135.0, false),
       Flipper::new(Vec2::new(1125.0, 990.0), 135.0, true),
@@ -109,7 +109,7 @@ impl Game {
 
     self.board.draw();
 
-    self.ball.draw();
+    self.ball.draw(&self.assets);
     self.flipper.0.draw();
     self.flipper.1.draw();
 
@@ -118,11 +118,11 @@ impl Game {
   }
 
   pub fn respawn(&mut self) {
-    self.ball = Ball::new(Vec2::new(1375.0, 200.0), Vec2::new(0.0, 0.0));
+    self.ball = Ball::new(Vec2::new(1375.0, 200.0), Vec2::new(0.0, 0.0), &self.assets);
   }
 
   pub fn reset(&mut self) {
-    self.ball = Ball::new(Vec2::new(1375.0, 200.0), Vec2::new(0.0, 0.0));
+    self.ball = Ball::new(Vec2::new(1375.0, 200.0), Vec2::new(0.0, 0.0), &self.assets);
     self.score_system.reset();
     for bumper in self.bumpers.iter_mut() {
       bumper.reset();
