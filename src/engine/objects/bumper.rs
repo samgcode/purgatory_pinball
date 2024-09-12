@@ -25,16 +25,22 @@ pub struct Bumper {
 }
 
 impl Bumper {
-  pub fn new(pos: Vec2, assets: &Assets, effect_type: BumperType) -> Self {
+  pub fn new(
+    pos: Vec2,
+    custom_strength: Option<f32>,
+    custom_score: Option<ScoreType>,
+    assets: &Assets,
+    effect_type: BumperType,
+  ) -> Self {
     let texture = Texture2D::empty();
     texture.set_filter(FilterMode::Nearest);
 
-    let strength = match &effect_type {
-      BumperType::White => 1500.0,
+    let strength = custom_strength.unwrap_or(match &effect_type {
+      BumperType::White => 200.0,
       BumperType::Blue => 500.0,
       BumperType::Pink => 1000.0,
       BumperType::Orange => 500.0,
-    };
+    });
 
     let animation_length = match &effect_type {
       BumperType::White => assets.bumper_white.animation_length,
@@ -43,12 +49,12 @@ impl Bumper {
       BumperType::Orange => assets.bumper_orange.animation_length,
     };
 
-    let score = match &effect_type {
+    let score = custom_score.unwrap_or(match &effect_type {
       BumperType::White => ScoreType::Points(100),
       BumperType::Blue => ScoreType::Points(250),
       BumperType::Pink => ScoreType::Multiplier(2.0),
       BumperType::Orange => ScoreType::Points(1000),
-    };
+    });
 
     Self {
       pos,

@@ -1,8 +1,8 @@
 # TODO List
 
-- [x] fix speeds/gravity
-- [ ] change scoring
-- [ ] variable strength
+- [x] change scoring
+- [x] variable strength
+- [ ] fix score system
 - [ ] fix scale of sprites
 - [ ] add second layer
 - [ ] ball sprite

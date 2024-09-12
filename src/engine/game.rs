@@ -29,13 +29,16 @@ impl Game {
       Flipper::new(Vec2::new(700.0, 990.0), 135.0, false),
       Flipper::new(Vec2::new(1125.0, 990.0), 135.0, true),
     );
+
+    #[rustfmt::skip]
     let bumpers = vec![
-      Bumper::new(Vec2::new(750.0, 700.0), &assets, BumperType::Orange),
-      Bumper::new(Vec2::new(560.0, 110.0), &assets, BumperType::Pink),
-      Bumper::new(Vec2::new(1050.0, 550.0), &assets, BumperType::Pink),
-      Bumper::new(Vec2::new(1150.0, 350.0), &assets, BumperType::Blue),
-      Bumper::new(Vec2::new(900.0, 240.0), &assets, BumperType::Blue),
-      Bumper::new(Vec2::new(1375.0, 1100.0), &assets, BumperType::White),
+      Bumper::new(Vec2::new(750.0, 700.0), None, None, &assets, BumperType::Orange),
+      Bumper::new(Vec2::new(560.0, 110.0), None, Some(ScoreType::_Bonus(5000)), &assets, BumperType::Pink),
+      Bumper::new(Vec2::new(1050.0, 550.0), None, None, &assets, BumperType::Pink),
+      Bumper::new(Vec2::new(1150.0, 350.0), None, None, &assets, BumperType::Blue),
+      Bumper::new(Vec2::new(900.0, 240.0), None, None, &assets, BumperType::Blue),
+      Bumper::new( Vec2::new(1375.0, 1100.0), Some(1500.0), None, &assets, BumperType::White,
+      ),
     ];
 
     let lose_zone = TriggerZone::new(Vec2::new(500.0, 1100.0), Vec2::new(800.0, 20.0));
