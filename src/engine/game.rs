@@ -26,15 +26,15 @@ impl Game {
 
     let ball = Ball::new(Vec2::new(1375.0, 300.0), Vec2::new(0.0, 0.0));
     let flipper = (
-      Flipper::new(Vec2::new(700.0, 990.0), 150.0, false),
-      Flipper::new(Vec2::new(1125.0, 990.0), 150.0, true),
+      Flipper::new(Vec2::new(700.0, 990.0), 135.0, false),
+      Flipper::new(Vec2::new(1125.0, 990.0), 135.0, true),
     );
     let bumpers = vec![
       Bumper::new(Vec2::new(750.0, 700.0), &assets, BumperType::Orange),
       Bumper::new(Vec2::new(560.0, 110.0), &assets, BumperType::Pink),
       Bumper::new(Vec2::new(1050.0, 550.0), &assets, BumperType::Pink),
       Bumper::new(Vec2::new(1150.0, 350.0), &assets, BumperType::Blue),
-      Bumper::new(Vec2::new(900.0, 250.0), &assets, BumperType::Blue),
+      Bumper::new(Vec2::new(900.0, 240.0), &assets, BumperType::Blue),
       Bumper::new(Vec2::new(1375.0, 1100.0), &assets, BumperType::White),
     ];
 

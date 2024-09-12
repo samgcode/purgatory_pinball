@@ -7,7 +7,7 @@ const MAX_ANGLE_REV: f32 = 200.0;
 
 const DEG_TO_RAD: f32 = std::f32::consts::PI / 180.0;
 
-const SPEED: f32 = 8.0;
+const SPEED: f32 = 7.0;
 const RETRACT_SPEED: f32 = 6.0;
 
 pub struct Flipper {
