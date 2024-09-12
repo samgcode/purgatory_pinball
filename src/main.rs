@@ -33,7 +33,12 @@ async fn main() {
     clear_background(BLACK);
 
     if fixed_dt >= 1.0 / 61.0 {
-      game.fixed_update(fixed_dt);
+      game.fixed_update(fixed_dt / 4.0);
+      game.fixed_update(fixed_dt / 4.0);
+      game.fixed_update(fixed_dt / 4.0);
+      game.fixed_update(fixed_dt / 4.0);
+
+      game.redraw();
 
       fixed_dt = 0.0;
     }
@@ -41,7 +46,7 @@ async fn main() {
     game.update(dt);
     game.draw();
 
-    draw_text("[V0.27]", 0.0, 20.0, 30.0, WHITE);
+    draw_text("[V0.28]", 0.0, 20.0, 30.0, WHITE);
 
     set_default_camera();
 

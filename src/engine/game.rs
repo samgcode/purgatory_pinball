@@ -9,7 +9,7 @@ pub use score::ScoreType;
 const GRAVITY: Vec2 = Vec2::new(0.0, 400.0);
 
 pub struct Game {
-  _assets: Assets,
+  assets: Assets,
 
   ball: Ball,
   flipper: (Flipper, Flipper),
@@ -46,7 +46,7 @@ impl Game {
     let board = Board::new(&assets);
 
     return Self {
-      _assets: assets,
+      assets,
       ball,
       flipper,
       bumpers,
@@ -65,14 +65,16 @@ impl Game {
     }
   }
 
+  pub fn redraw(&mut self) {
+    for bumper in self.bumpers.iter_mut() {
+      bumper.redraw();
+    }
+  }
+
   pub fn fixed_update(&mut self, fixed_dt: f32) {
     self.ball.fixed_update(GRAVITY, fixed_dt);
     self.flipper.0.fixed_update(fixed_dt);
     self.flipper.1.fixed_update(fixed_dt);
-
-    for bumper in self.bumpers.iter_mut() {
-      bumper.fixed_update();
-    }
 
     for wall in self.board.walls.iter() {
       physics::ball_to_line(&mut self.ball, *wall);
@@ -80,12 +82,12 @@ impl Game {
     physics::ball_to_flipper(&mut self.ball, &self.flipper.0);
     physics::ball_to_flipper(&mut self.ball, &self.flipper.1);
 
-    // for bumper in self.bumpers.iter_mut() {
-    //   let score = bumper::ball_to_bumper(&mut self.ball, bumper);
-    //   if let Some(score) = score {
-    //     self.score_system.apply_score(score);
-    //   }
-    // }
+    for bumper in self.bumpers.iter_mut() {
+      let score = bumper::ball_to_bumper(&mut self.ball, bumper);
+      if let Some(score) = score {
+        self.score_system.apply_score(score);
+      }
+    }
 
     physics::ball_trigger_zone(&mut self.ball, &mut self.lose_zone);
 
@@ -107,9 +109,9 @@ impl Game {
     self.flipper.0.draw();
     self.flipper.1.draw();
 
-    // for bumper in self.bumpers.iter_mut() {
-    //   bumper.draw(&self.assets);
-    // }
+    for bumper in self.bumpers.iter_mut() {
+      bumper.draw(&self.assets);
+    }
 
     self.lose_zone.draw();
   }

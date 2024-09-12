@@ -68,7 +68,7 @@ impl Bumper {
     }
   }
 
-  pub fn fixed_update(&mut self) {
+  pub fn redraw(&mut self) {
     if self.animation_frame > 0 {
       self.animation_frame += 1;
       if self.animation_frame >= self.animation_length {
