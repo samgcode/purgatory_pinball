@@ -38,40 +38,59 @@ impl Board {
 
     let mut walls = Vec::new();
     let scale = 8.0 * SCALE;
-    for y in 0..LEVEL_0.len() {
-      for x in 0..LEVEL_0[y].len() {
-        if LEVEL_0[y][x] == 0 {
-          if x < 1 || y < 1 || x >= WIDTH as usize || y >= HEIGHT as usize {
-            continue;
-          }
-          if LEVEL_0[y - 1][x] == 1 {
-            let x = x as f32 * scale + CENTER_OFFSET;
-            let y = y as f32 * scale;
+    for i in 1..LEVEL_0.len() - 1 {
+      for j in 1..LEVEL_0[i].len() - 1 {
+        let x = j as f32 * scale + CENTER_OFFSET;
+        let y = i as f32 * scale;
+
+        let (n, e, s, w) = (
+          LEVEL_0[i - 1][j],
+          LEVEL_0[i][j + 1],
+          LEVEL_0[i + 1][j],
+          LEVEL_0[i][j - 1],
+        );
+
+        if LEVEL_0[i][j] == 0 {
+          if n == 1 {
             walls.push((Vec2::new(x, y), Vec2::new(x + scale, y)));
           }
-          if LEVEL_0[y + 1][x] == 1 {
-            let x = x as f32 * scale + CENTER_OFFSET;
-            let y = y as f32 * scale;
-            walls.push((Vec2::new(x, y + scale), Vec2::new(x + scale, y + scale)));
-          }
-          if LEVEL_0[y][x - 1] == 1 {
-            let x = x as f32 * scale + CENTER_OFFSET;
-            let y = y as f32 * scale;
-            walls.push((Vec2::new(x, y), Vec2::new(x, y + scale)));
-          }
-          if LEVEL_0[y][x + 1] == 1 {
-            let x = x as f32 * scale + CENTER_OFFSET;
-            let y = y as f32 * scale;
+          if e == 1 {
             walls.push((Vec2::new(x + scale, y), Vec2::new(x + scale, y + scale)));
           }
-        } else if LEVEL_0[y][x] == 2 {
-          let x = x as f32 * scale + CENTER_OFFSET;
-          let y = y as f32 * scale;
+          if s == 1 {
+            walls.push((Vec2::new(x, y + scale), Vec2::new(x + scale, y + scale)));
+          }
+          if w == 1 {
+            walls.push((Vec2::new(x, y), Vec2::new(x, y + scale)));
+          }
+        } else if LEVEL_0[i][j] == 2 {
           walls.push((Vec2::new(x + scale, y), Vec2::new(x, y + scale)));
-        } else if LEVEL_0[y][x] == 3 {
-          let x = x as f32 * scale + CENTER_OFFSET;
-          let y = y as f32 * scale;
+          if n >= 1 && e == 0 && w == 0 {
+            walls.push((Vec2::new(x, y), Vec2::new(x, y + scale)));
+          }
+          if e >= 1 && n == 0 && s == 0 {
+            walls.push((Vec2::new(x, y + scale), Vec2::new(x + scale, y + scale)));
+          }
+          if s >= 1 && e == 0 && w == 0 {
+            walls.push((Vec2::new(x + scale, y), Vec2::new(x + scale, y + scale)));
+          }
+          if w >= 1 && n == 0 && s == 0 {
+            walls.push((Vec2::new(x, y), Vec2::new(x + scale, y)));
+          }
+        } else if LEVEL_0[i][j] == 3 {
           walls.push((Vec2::new(x, y), Vec2::new(x + scale, y + scale)));
+          if n >= 1 && e == 0 && w == 0 {
+            walls.push((Vec2::new(x + scale, y), Vec2::new(x + scale, y + scale)));
+          }
+          if e >= 1 && n == 0 && s == 0 {
+            walls.push((Vec2::new(x, y), Vec2::new(x + scale, y)));
+          }
+          if s >= 1 && e == 0 && w == 0 {
+            walls.push((Vec2::new(x, y), Vec2::new(x, y + scale)));
+          }
+          if w >= 1 && n == 0 && s == 0 {
+            walls.push((Vec2::new(x, y + scale), Vec2::new(x + scale, y + scale)));
+          }
         }
       }
     }

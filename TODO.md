@@ -2,11 +2,12 @@
 
 - [ ] make proper map
 - [ ] add bumpers
-- [x] add flippers
   - [ ] change input
 - [ ] fix scale of sprites
 - [ ] add second layer
 - [ ] more physics steps
+- [ ] ball sprite
+- [ ] springs
 
 # Bugs
 
