@@ -1,8 +1,6 @@
 # TODO List
 
-- [x] change scoring
-- [x] variable strength
-- [ ] fix score system
+- [x] fix score system
 - [ ] fix scale of sprites
 - [ ] add second layer
 - [ ] ball sprite

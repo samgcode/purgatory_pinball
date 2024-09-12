@@ -3,7 +3,7 @@ use macroquad::prelude::*;
 #[derive(Clone)]
 pub enum ScoreType {
   Points(i32),
-  _Bonus(i32),
+  Bonus(i32),
   Multiplier(f32),
   SetMulti(f32),
 }
@@ -45,11 +45,15 @@ impl ScoreSystem {
         self.score += (points as f32 * self.multiplier) as i32;
         self.multiplier = 1.0;
       }
-      ScoreType::_Bonus(points) => {
+      ScoreType::Bonus(points) => {
         self.score += (points as f32 * self.multiplier) as i32;
       }
       ScoreType::Multiplier(multiplier) => {
-        self.multiplier *= multiplier;
+        if self.multiplier <= 0.0 {
+          self.multiplier = multiplier;
+        } else {
+          self.multiplier *= multiplier;
+        }
       }
       ScoreType::SetMulti(multiplier) => {
         self.multiplier = multiplier;

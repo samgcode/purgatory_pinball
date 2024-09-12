@@ -33,7 +33,7 @@ impl Game {
     #[rustfmt::skip]
     let bumpers = vec![
       Bumper::new(Vec2::new(750.0, 700.0), None, None, &assets, BumperType::Orange),
-      Bumper::new(Vec2::new(560.0, 110.0), None, Some(ScoreType::_Bonus(5000)), &assets, BumperType::Pink),
+      Bumper::new(Vec2::new(560.0, 110.0), None, Some(ScoreType::Bonus(5000)), &assets, BumperType::Pink),
       Bumper::new(Vec2::new(1050.0, 550.0), None, None, &assets, BumperType::Pink),
       Bumper::new(Vec2::new(1150.0, 350.0), None, None, &assets, BumperType::Blue),
       Bumper::new(Vec2::new(900.0, 240.0), None, None, &assets, BumperType::Blue),
@@ -96,7 +96,7 @@ impl Game {
     if let CollisionState::Enter = self.lose_zone.state {
       self.score_system.die();
       self.respawn();
-      if self.score_system.lives < 0 {
+      if self.score_system.lives <= 0 {
         self.reset();
       }
     }
@@ -108,15 +108,13 @@ impl Game {
     }
 
     self.board.draw();
-    // draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
-
-    // self.score_system.draw();
 
     self.ball.draw();
     self.flipper.0.draw();
     self.flipper.1.draw();
 
-    // self.lose_zone.draw();
+    self.score_system.draw();
+    // draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
   }
 
   pub fn respawn(&mut self) {
