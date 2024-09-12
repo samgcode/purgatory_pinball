@@ -69,6 +69,11 @@ macro_rules! include_tileset {
         //
         include_image!(concat!("../assets/tiles/slope_corner/14.png")),
         //
+        include_image!(concat!("../assets/tiles/slope_corner/23.png")),
+        include_image!(concat!("../assets/tiles/slope_corner/24.png")),
+        include_image!(concat!("../assets/tiles/slope_corner/25.png")),
+        include_image!(concat!("../assets/tiles/slope_corner/26.png")),
+        //
         include_image!(concat!("../assets/tiles/solid/0.png")),
         //
         include_image!(concat!("../assets/tiles/solid/1.png")),
