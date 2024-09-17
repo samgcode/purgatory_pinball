@@ -1,12 +1,10 @@
 use macroquad::prelude::*;
 
-pub use ball::BallSprite;
-pub use bumper::BumperSprite;
-pub use spring::SpringSprite;
+use animated_sprite::AnimatedSprite;
+use ball::BallSprite;
 
+mod animated_sprite;
 mod ball;
-mod bumper;
-mod spring;
 mod tileset;
 
 macro_rules! include_image {
@@ -17,7 +15,8 @@ macro_rules! include_image {
 
 macro_rules! include_bumper {
   ( $x:expr, $y:expr ) => {
-    BumperSprite {
+    AnimatedSprite {
+      scale_factor: 2.0 * 64.0 / 20.0,
       sprites: vec![
         include_image!(concat!("../assets/bumpers/", $x, "/", $y, "00.png")),
         include_image!(concat!("../assets/bumpers/", $x, "/", $y, "34.png")),
@@ -43,7 +42,8 @@ macro_rules! include_bumper {
 
 macro_rules! include_spring {
   ( ) => {
-    SpringSprite {
+    AnimatedSprite {
+      scale_factor: 16.0 / 12.0,
       sprites: vec![
         include_image!(concat!("../assets/springreen/00.png")),
         include_image!(concat!("../assets/springreen/01.png")),
@@ -136,13 +136,13 @@ macro_rules! include_tileset {
 }
 
 pub struct Assets {
-  pub bumper_blue: BumperSprite,
-  pub bumper_white: BumperSprite,
-  pub bumper_pink: BumperSprite,
-  pub bumper_orange: BumperSprite,
+  pub bumper_blue: AnimatedSprite,
+  pub bumper_white: AnimatedSprite,
+  pub bumper_pink: AnimatedSprite,
+  pub bumper_orange: AnimatedSprite,
   pub tileset: tileset::Tileset,
   pub ball: ball::BallSprite,
-  pub spring: SpringSprite,
+  pub spring: AnimatedSprite,
 }
 
 pub async fn load_assets() -> Assets {

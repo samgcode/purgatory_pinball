@@ -7,7 +7,6 @@ use super::TriggerZone;
 const WIDTH: f32 = 48.0;
 const HEIGHT: f32 = WIDTH / 4.0;
 const DEFAULT_STRENGTH: f32 = 500.0;
-const OFFSET: f32 = 16.0 / 24.0 * WIDTH - HEIGHT / 2.0;
 
 #[allow(unused)]
 pub enum Direction {
@@ -54,7 +53,7 @@ impl Spring {
 
     Self {
       pos,
-      direction, // texture: Texture2D::empty(),
+      direction,
       normal,
       strength: strength.unwrap_or(DEFAULT_STRENGTH),
       collider,
@@ -81,7 +80,7 @@ impl Spring {
   pub fn draw(&self, assets: &Assets) {
     assets.spring.draw(
       &self.texture,
-      self.pos + OFFSET * self.normal,
+      self.pos + (assets.spring.scale_factor * WIDTH * 0.5 - HEIGHT * 0.5) * self.normal,
       WIDTH,
       self.animation_frame,
     );

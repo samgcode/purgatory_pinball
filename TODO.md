@@ -2,10 +2,8 @@
 
 - [ ] fix scale of sprites
 - [ ] add second layer
-- [ ] springs
-  - [x] functionality
-  - [x] sprite
-- [ ] refactor animated sprites
+- [x] refactor animated sprites
+- [ ] refactor static sprites
 
 # Bugs
 

@@ -1,16 +1,15 @@
 use macroquad::prelude::*;
 
-const SPRITE_SCALE_FACTOR: f32 = 2.0 * 64.0 / 20.0;
-
-pub struct BumperSprite {
+pub struct AnimatedSprite {
+  pub scale_factor: f32,
   pub sprites: Vec<Image>,
   pub animation: Vec<usize>,
   pub animation_length: usize,
 }
 
-impl BumperSprite {
-  pub fn draw(&self, texture: &Texture2D, pos: Vec2, scale: f32, sprite: usize) {
-    let size = scale * SPRITE_SCALE_FACTOR;
+impl AnimatedSprite {
+  pub fn draw(&self, texture: &Texture2D, pos: Vec2, width: f32, sprite: usize) {
+    let size = width * self.scale_factor;
 
     texture.update(&self.sprites[self.animation[sprite]]);
 
@@ -24,5 +23,12 @@ impl BumperSprite {
         ..Default::default()
       },
     );
+  }
+
+  pub fn create_texture(&self) -> Texture2D {
+    let texture = Texture2D::from_image(&self.sprites[0]);
+    texture.set_filter(FilterMode::Nearest);
+
+    return texture;
   }
 }
