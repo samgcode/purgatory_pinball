@@ -7,6 +7,7 @@ use score::ScoreSystem;
 pub use score::ScoreType;
 
 const GRAVITY: Vec2 = Vec2::new(0.0, 400.0);
+const START_HEIGHT: f32 = 900.0;
 
 pub struct Game {
   assets: Assets,
@@ -14,6 +15,7 @@ pub struct Game {
   ball: Ball,
   flipper: (Flipper, Flipper),
   bumpers: Vec<Bumper>,
+  springs: Vec<Spring>,
   lose_zone: TriggerZone,
   score_system: ScoreSystem,
 
@@ -24,7 +26,11 @@ impl Game {
   pub async fn init() -> Self {
     let assets = load_assets().await;
 
-    let ball = Ball::new(Vec2::new(1375.0, 300.0), Vec2::new(0.0, 0.0), &assets);
+    let ball = Ball::new(
+      Vec2::new(1375.0, START_HEIGHT),
+      Vec2::new(0.0, 0.0),
+      &assets,
+    );
     let flipper = (
       Flipper::new(Vec2::new(700.0, 990.0), 135.0, false),
       Flipper::new(Vec2::new(1125.0, 990.0), 135.0, true),
@@ -37,8 +43,12 @@ impl Game {
       Bumper::new(Vec2::new(1050.0, 550.0), None, None, &assets, BumperType::Pink),
       Bumper::new(Vec2::new(1150.0, 350.0), None, None, &assets, BumperType::Blue),
       Bumper::new(Vec2::new(900.0, 240.0), None, None, &assets, BumperType::Blue),
-      Bumper::new( Vec2::new(1375.0, 1100.0), Some(1500.0), None, &assets, BumperType::White,
-      ),
+      // Bumper::new( Vec2::new(1375.0, 1100.0), Some(1500.0), Some(ScoreType::Points(0)), &assets, BumperType::White),
+    ];
+
+    let springs = vec![
+      Spring::new(Vec2::new(1375.0, 1050.0), Direction::Up, Some(1200.0)),
+      // Spring::new(Vec2::new(900.0, 700.0), Direction::Left, None),
     ];
 
     let lose_zone = TriggerZone::new(Vec2::new(500.0, 1100.0), Vec2::new(800.0, 20.0));
@@ -52,6 +62,7 @@ impl Game {
       ball,
       flipper,
       bumpers,
+      springs,
       lose_zone,
       score_system,
       board,
@@ -91,6 +102,10 @@ impl Game {
       }
     }
 
+    for spring in self.springs.iter_mut() {
+      physics::ball_spring(&mut self.ball, spring);
+    }
+
     physics::ball_trigger_zone(&mut self.ball, &mut self.lose_zone);
 
     if let CollisionState::Enter = self.lose_zone.state {
@@ -103,8 +118,12 @@ impl Game {
   }
 
   pub fn draw(&mut self) {
-    for bumper in self.bumpers.iter_mut() {
+    for bumper in self.bumpers.iter() {
       bumper.draw(&self.assets);
+    }
+
+    for spring in self.springs.iter() {
+      spring.draw();
     }
 
     self.board.draw();
@@ -118,14 +137,29 @@ impl Game {
   }
 
   pub fn respawn(&mut self) {
-    self.ball = Ball::new(Vec2::new(1375.0, 200.0), Vec2::new(0.0, 0.0), &self.assets);
+    self.ball = Ball::new(
+      Vec2::new(1375.0, START_HEIGHT),
+      Vec2::new(0.0, 0.0),
+      &self.assets,
+    );
   }
 
   pub fn reset(&mut self) {
-    self.ball = Ball::new(Vec2::new(1375.0, 200.0), Vec2::new(0.0, 0.0), &self.assets);
+    self.ball = Ball::new(
+      Vec2::new(1375.0, START_HEIGHT),
+      Vec2::new(0.0, 0.0),
+      &self.assets,
+    );
     self.score_system.reset();
     for bumper in self.bumpers.iter_mut() {
       bumper.reset();
     }
   }
 }
+
+// 1:13:03
+// 1:07:37
+// 1:23:33
+//
+//
+//

@@ -126,3 +126,12 @@ pub fn ball_trigger_zone(ball: &Ball, zone: &mut TriggerZone) {
   }
   zone.colliding = false;
 }
+
+pub fn ball_spring(ball: &mut Ball, spring: &mut Spring) {
+  ball_trigger_zone(ball, &mut spring.collider);
+
+  if let CollisionState::Enter = spring.collider.state {
+    ball.velocity = ball.velocity - 2.0 * ball.velocity.dot(spring.normal) * spring.normal
+      + spring.normal * spring.strength;
+  }
+}

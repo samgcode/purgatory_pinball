@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-use crate::{assets, Assets};
+use crate::Assets;
 
 pub struct Ball {
   pub pos: Vec2,
