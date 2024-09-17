@@ -46,8 +46,9 @@ impl Game {
       // Bumper::new( Vec2::new(1375.0, 1100.0), Some(1500.0), Some(ScoreType::Points(0)), &assets, BumperType::White),
     ];
 
+    #[rustfmt::skip]
     let springs = vec![
-      Spring::new(Vec2::new(1375.0, 1050.0), Direction::Up, Some(1200.0)),
+      Spring::new(Vec2::new(1375.0, 1050.0), Direction::Up, Some(1200.0), &assets),
       // Spring::new(Vec2::new(900.0, 700.0), Direction::Left, None),
     ];
 
@@ -81,6 +82,10 @@ impl Game {
   pub fn redraw(&mut self) {
     for bumper in self.bumpers.iter_mut() {
       bumper.redraw();
+    }
+
+    for spring in self.springs.iter_mut() {
+      spring.redraw();
     }
   }
 
@@ -123,7 +128,7 @@ impl Game {
     }
 
     for spring in self.springs.iter() {
-      spring.draw();
+      spring.draw(&self.assets);
     }
 
     self.board.draw();
@@ -133,7 +138,6 @@ impl Game {
     self.flipper.1.draw();
 
     self.score_system.draw();
-    // draw_text("pumball pingatory", 100.0, 100.0, 30.0, WHITE);
   }
 
   pub fn respawn(&mut self) {

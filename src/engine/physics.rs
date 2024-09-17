@@ -133,5 +133,6 @@ pub fn ball_spring(ball: &mut Ball, spring: &mut Spring) {
   if let CollisionState::Enter = spring.collider.state {
     ball.velocity = ball.velocity - 2.0 * ball.velocity.dot(spring.normal) * spring.normal
       + spring.normal * spring.strength;
+    spring.hit();
   }
 }

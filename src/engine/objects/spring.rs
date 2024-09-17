@@ -1,10 +1,13 @@
 use macroquad::prelude::*;
 
+use crate::Assets;
+
 use super::TriggerZone;
 
 const WIDTH: f32 = 48.0;
-const HEIGHT: f32 = 12.0;
+const HEIGHT: f32 = WIDTH / 4.0;
 const DEFAULT_STRENGTH: f32 = 500.0;
+const OFFSET: f32 = 16.0 / 24.0 * WIDTH - HEIGHT / 2.0;
 
 #[allow(unused)]
 pub enum Direction {
@@ -21,11 +24,14 @@ pub struct Spring {
   pub direction: Direction,
   pub normal: Vec2,
   pub strength: f32,
-  pub collider: TriggerZone, // texture: Texture2D,
+  pub collider: TriggerZone,
+  texture: Texture2D,
+  animation_frame: usize,
+  animation_length: usize,
 }
 
 impl Spring {
-  pub fn new(pos: Vec2, direction: Direction, strength: Option<f32>) -> Self {
+  pub fn new(pos: Vec2, direction: Direction, strength: Option<f32>, assets: &Assets) -> Self {
     if let Direction::Right | Direction::Left = direction {}
 
     let collider = match direction {
@@ -52,26 +58,33 @@ impl Spring {
       normal,
       strength: strength.unwrap_or(DEFAULT_STRENGTH),
       collider,
+      texture: assets.spring.create_texture(),
+      animation_frame: 0,
+      animation_length: assets.spring.animation_length,
     }
   }
 
-  pub fn draw(&self) {
-    let (x, y, w, h) = match self.direction {
-      Direction::Up | Direction::Down => (
-        self.pos.x - WIDTH / 2.0,
-        self.pos.y - HEIGHT / 2.0,
-        WIDTH,
-        HEIGHT,
-      ),
-      Direction::Left | Direction::Right => (
-        self.pos.x - HEIGHT / 2.0,
-        self.pos.y - WIDTH / 2.0,
-        HEIGHT,
-        WIDTH,
-      ),
-    };
+  pub fn hit(&mut self) {
+    self.animation_frame = 1;
+  }
 
-    draw_rectangle(x, y, w, h, GREEN);
-    // self.collider.draw();
+  pub fn redraw(&mut self) {
+    if self.animation_frame > 0 {
+      self.animation_frame += 1;
+
+      if self.animation_frame >= self.animation_length {
+        self.animation_frame = 0;
+      }
+    }
+  }
+
+  pub fn draw(&self, assets: &Assets) {
+    assets.spring.draw(
+      &self.texture,
+      self.pos + OFFSET * self.normal,
+      WIDTH,
+      self.animation_frame,
+    );
+    self.collider.draw();
   }
 }

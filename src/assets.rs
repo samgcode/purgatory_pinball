@@ -2,9 +2,11 @@ use macroquad::prelude::*;
 
 pub use ball::BallSprite;
 pub use bumper::BumperSprite;
+pub use spring::SpringSprite;
 
 mod ball;
 mod bumper;
+mod spring;
 mod tileset;
 
 macro_rules! include_image {
@@ -35,6 +37,26 @@ macro_rules! include_bumper {
         9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11,
       ],
       animation_length: 45,
+    }
+  };
+}
+
+macro_rules! include_spring {
+  ( ) => {
+    SpringSprite {
+      sprites: vec![
+        include_image!(concat!("../assets/springreen/00.png")),
+        include_image!(concat!("../assets/springreen/01.png")),
+        include_image!(concat!("../assets/springreen/02.png")),
+        include_image!(concat!("../assets/springreen/03.png")),
+        include_image!(concat!("../assets/springreen/04.png")),
+        include_image!(concat!("../assets/springreen/05.png")),
+      ],
+      animation: vec![
+        0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 2,
+        2, 2, 2, 2, 2, 2, 2, 4, 4, 4, 4, 5, 5, 5, 5, 5,
+      ],
+      animation_length: 46,
     }
   };
 }
@@ -120,6 +142,7 @@ pub struct Assets {
   pub bumper_orange: BumperSprite,
   pub tileset: tileset::Tileset,
   pub ball: ball::BallSprite,
+  pub spring: SpringSprite,
 }
 
 pub async fn load_assets() -> Assets {
@@ -134,6 +157,8 @@ pub async fn load_assets() -> Assets {
     sprite: include_image!("../assets/ball.png"),
   };
 
+  let spring = include_spring!();
+
   return Assets {
     bumper_blue,
     bumper_white,
@@ -141,6 +166,7 @@ pub async fn load_assets() -> Assets {
     bumper_orange,
     tileset,
     ball,
+    spring,
   };
 }
 
