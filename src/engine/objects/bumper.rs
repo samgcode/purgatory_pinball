@@ -78,7 +78,7 @@ impl Bumper {
 
     if let BumperType::Orange = self.effect_type {
       self.strength = 0.0;
-      self.score = ScoreType::SetMulti(-1.0);
+      self.score = ScoreType::SetMulti(-0.5);
     }
   }
 

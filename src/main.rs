@@ -19,7 +19,7 @@ async fn main() {
   let render_target = render_target_msaa(WIDTH as u32, HEIGHT as u32, 4);
   render_target.texture.set_filter(FilterMode::Linear);
 
-  let mut render_target_cam = Camera2D::from_display_rect(Rect::new(0., 0., WIDTH, HEIGHT));
+  let mut render_target_cam = Camera2D::from_display_rect(Rect::new(0.0, 0.0, WIDTH, HEIGHT));
   render_target_cam.render_target = Some(render_target.clone());
 
   loop {
@@ -46,14 +46,15 @@ async fn main() {
     game.update(dt);
     game.draw();
 
-    draw_text("[V0.39]", 0.0, 20.0, 30.0, WHITE);
-
     set_default_camera();
+
+    game.draw_ui();
+    draw_text("[V0.40]", 0.0, 20.0, 30.0, WHITE);
 
     draw_texture_ex(
       &render_target.texture,
-      (screen_width() - (WIDTH * scale)) * 0.5,
-      (screen_height() - (HEIGHT * scale)) * 0.5,
+      (screen_width() - (WIDTH * scale)) * 0.5 + game.camera_pos.x,
+      (screen_height() - (HEIGHT * scale)) * 0.5 + game.camera_pos.y,
       WHITE,
       DrawTextureParams {
         dest_size: Some(vec2(WIDTH * scale, HEIGHT * scale)),

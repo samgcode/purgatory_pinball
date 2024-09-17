@@ -67,9 +67,8 @@ impl ScoreSystem {
     let lives = format!("Lives: {}", self.lives);
     let multiplier = format!("Mult: {:.2}", self.multiplier);
 
-    draw_text(&score, 200.0, 20.0, 30.0, WHITE);
-    draw_text(&multiplier, 500.0, 20.0, 30.0, WHITE);
-    draw_text(&lives, 700.0, 20.0, 30.0, WHITE);
-    draw_text(&highscore, 900.0, 20.0, 30.0, WHITE);
+    let ui = format!("{}\t\t{}\t\t{}\t\t{}", score, multiplier, lives, highscore);
+
+    draw_text(&ui, 200.0, 20.0, 20.0, WHITE);
   }
 }

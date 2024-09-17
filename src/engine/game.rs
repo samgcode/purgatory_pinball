@@ -8,6 +8,7 @@ pub use score::ScoreType;
 
 const GRAVITY: Vec2 = Vec2::new(0.0, 400.0);
 const START_HEIGHT: f32 = 900.0;
+const CAMERA_SPEED: f32 = 1.0;
 
 pub struct Game {
   assets: Assets,
@@ -18,8 +19,9 @@ pub struct Game {
   springs: Vec<Spring>,
   lose_zone: TriggerZone,
   score_system: ScoreSystem,
-
   board: Board,
+
+  pub camera_pos: Vec2,
 }
 
 impl Game {
@@ -67,6 +69,7 @@ impl Game {
       lose_zone,
       score_system,
       board,
+      camera_pos: Vec2::new(0.0, 0.0),
     };
   }
 
@@ -76,6 +79,19 @@ impl Game {
 
     if is_key_pressed(KeyCode::R) {
       self.reset();
+    }
+
+    if is_key_down(KeyCode::Left) {
+      self.camera_pos.x += CAMERA_SPEED;
+    }
+    if is_key_down(KeyCode::Right) {
+      self.camera_pos.x -= CAMERA_SPEED;
+    }
+    if is_key_down(KeyCode::Up) {
+      self.camera_pos.y += CAMERA_SPEED;
+    }
+    if is_key_down(KeyCode::Down) {
+      self.camera_pos.y -= CAMERA_SPEED;
     }
   }
 
@@ -123,9 +139,9 @@ impl Game {
   }
 
   pub fn draw(&mut self) {
-    for bumper in self.bumpers.iter() {
-      bumper.draw(&self.assets);
-    }
+    // for bumper in self.bumpers.iter() {
+    //   bumper.draw(&self.assets);
+    // }
 
     for spring in self.springs.iter() {
       spring.draw(&self.assets);
@@ -136,7 +152,9 @@ impl Game {
     self.ball.draw(&self.assets);
     self.flipper.0.draw();
     self.flipper.1.draw();
+  }
 
+  pub fn draw_ui(&self) {
     self.score_system.draw();
   }
 
