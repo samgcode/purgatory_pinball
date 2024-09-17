@@ -84,6 +84,5 @@ impl Spring {
       WIDTH,
       self.animation_frame,
     );
-    self.collider.draw();
   }
 }

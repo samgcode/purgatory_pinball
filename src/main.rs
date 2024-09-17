@@ -7,8 +7,8 @@ mod assets;
 mod drawing;
 mod engine;
 
-const WIDTH: f32 = 1920.0;
-const HEIGHT: f32 = 1080.0;
+pub const WIDTH: f32 = 1920.0;
+pub const HEIGHT: f32 = 1080.0;
 
 #[macroquad::main("purgatory pinball")]
 async fn main() {
@@ -38,7 +38,7 @@ async fn main() {
       game.fixed_update(fixed_dt / 4.0);
       game.fixed_update(fixed_dt / 4.0);
 
-      game.redraw();
+      game.redraw(scale);
 
       fixed_dt = 0.0;
     }
@@ -47,9 +47,6 @@ async fn main() {
     game.draw();
 
     set_default_camera();
-
-    game.draw_ui();
-    draw_text("[V0.40]", 0.0, 20.0, 30.0, WHITE);
 
     draw_texture_ex(
       &render_target.texture,
@@ -62,6 +59,9 @@ async fn main() {
         ..Default::default()
       },
     );
+
+    game.draw_ui(scale);
+    draw_text("[V0.41]", 0.0, 20.0, 30.0, WHITE);
 
     next_frame().await
   }
