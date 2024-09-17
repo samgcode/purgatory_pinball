@@ -4,6 +4,7 @@ use super::Ball;
 use crate::game::ScoreType;
 use crate::Assets;
 
+#[allow(unused)]
 pub enum BumperType {
   White,
   Blue,

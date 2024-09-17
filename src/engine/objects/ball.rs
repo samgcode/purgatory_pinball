@@ -2,6 +2,8 @@ use macroquad::prelude::*;
 
 use crate::Assets;
 
+const SPRITE_OFFSET: Vec2 = Vec2::new(2.0, -2.0);
+
 pub struct Ball {
   pub pos: Vec2,
   pub velocity: Vec2,
@@ -25,6 +27,8 @@ impl Ball {
   }
 
   pub fn draw(&self, assets: &Assets) {
-    assets.ball.draw(&self.texture, self.pos, self.radius);
+    assets
+      .ball
+      .draw(&self.texture, self.pos + SPRITE_OFFSET, self.radius);
   }
 }
