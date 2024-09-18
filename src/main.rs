@@ -22,6 +22,21 @@ async fn main() {
   let mut render_target_cam = Camera2D::from_display_rect(Rect::new(0.0, 0.0, WIDTH, HEIGHT));
   render_target_cam.render_target = Some(render_target.clone());
 
+  let tile_material = load_material(
+    ShaderSource::Glsl {
+      vertex: include_str!("vert.glsl"),
+      fragment: include_str!("frag.glsl"),
+    },
+    MaterialParams {
+      uniforms: vec![UniformDesc::new("t", UniformType::Float1)],
+      ..Default::default()
+    },
+  )
+  .unwrap();
+
+  // tile_material.set_texture("tex", render_target.texture);
+  let mut t: f32 = 0.0;
+
   loop {
     let dt = get_frame_time();
     fixed_dt += dt;
@@ -48,6 +63,9 @@ async fn main() {
 
     set_default_camera();
 
+    tile_material.set_uniform("t", t);
+    t += 0.01;
+
     draw_texture_ex(
       &render_target.texture,
       (screen_width() - (WIDTH * scale)) * 0.5 + game.camera_pos.x,
@@ -59,9 +77,12 @@ async fn main() {
         ..Default::default()
       },
     );
+    gl_use_material(&tile_material);
+    draw_rectangle(0.0, 0.0, screen_width(), screen_height(), RED);
+    gl_use_default_material();
 
     game.draw_ui(scale);
-    draw_text("[V0.41]", 0.0, 20.0, 30.0, WHITE);
+    draw_text("[V0.42]", 0.0, 20.0, 30.0, WHITE);
 
     next_frame().await
   }

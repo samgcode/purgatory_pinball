@@ -94,7 +94,7 @@ impl Game {
     let center = Vec2::new(1920.0 / 2.0, 1080.0 / 2.0);
 
     let pos = center - self.ball.pos;
-    self.camera_pos = pos * scale * CAMERA_SPEED;
+    // self.camera_pos = pos * scale * CAMERA_SPEED;
   }
 
   pub fn fixed_update(&mut self, fixed_dt: f32) {
@@ -175,5 +175,5 @@ impl Game {
 // 1:07:37
 // 1:23:33
 // ??
-// ?
+// 1:14:08
 // ??
