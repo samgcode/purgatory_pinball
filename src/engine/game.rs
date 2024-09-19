@@ -88,7 +88,7 @@ impl Game {
     }
   }
 
-  pub fn redraw(&mut self, scale: f32) {
+  pub fn redraw(&mut self, _scale: f32) {
     for bumper in self.bumpers.iter_mut() {
       bumper.redraw();
     }
@@ -99,7 +99,7 @@ impl Game {
 
     let center = Vec2::new(1920.0 / 2.0, 1080.0 / 2.0);
 
-    let pos = center - self.ball.pos;
+    let _pos = center - self.ball.pos;
     // self.camera_pos = pos * scale * CAMERA_SPEED;
   }
 
@@ -158,8 +158,8 @@ impl Game {
     self.flipper.1.draw();
   }
 
-  pub fn draw_ui(&self, _scale: f32) {
-    self.score_system.draw();
+  pub fn draw_ui(&self, scale: f32) {
+    self.score_system.draw(scale);
   }
 
   pub fn respawn(&mut self) {

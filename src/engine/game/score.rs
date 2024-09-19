@@ -61,7 +61,9 @@ impl ScoreSystem {
     }
   }
 
-  pub fn draw(&self) {
+  pub fn draw(&self, scale: f32) {
+    let font_size = 45.0 * scale;
+
     let score = format!("Score: {}", self.score);
     let highscore = format!("Highscore: {}", self.highscore);
     let lives = format!("Lives: {}", self.lives);
@@ -69,6 +71,6 @@ impl ScoreSystem {
 
     let ui = format!("{}\t\t{}\t\t{}\t\t{}", score, multiplier, lives, highscore);
 
-    draw_text(&ui, 200.0, 20.0, 20.0, WHITE);
+    draw_text(&ui, 200.0, font_size * 0.8, font_size, WHITE);
   }
 }

@@ -31,7 +31,7 @@ void main() {
   vec4 tex = texture2D(tex, uv);
   
   float a = sqrt(tex.r * tex.g * tex.b);
-  float h = mod(t/10.0 * uv_screen.x * uv_screen.y, 1.0);
+  float h = mod(0.5 * t + 0.4 * uv_screen.x * uv_screen.y, 1.0);
 
   vec4 screen = texture2D(_ScreenTexture, uv_screen);
   vec4 tile = vec4(getGradient(p1, p2, p3, p4, h), tex.a) * a;
