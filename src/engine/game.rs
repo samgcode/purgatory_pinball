@@ -138,7 +138,9 @@ impl Game {
     for spring in self.springs.iter() {
       spring.draw(&self.assets);
     }
+  }
 
+  pub fn draw_shaded(&mut self) {
     self.board.draw();
 
     self.ball.draw(&self.assets);
@@ -174,6 +176,6 @@ impl Game {
 // 1:13:03
 // 1:07:37
 // 1:23:33
-// ??
+// 1:24:47
 // 1:14:08
-// ??
+// 0:08:59

@@ -1,8 +1,8 @@
 #version 100
+
 attribute vec3 position;
 attribute vec2 texcoord;
 
-varying lowp vec2 center;
 varying lowp vec2 uv;
 varying lowp vec2 uv_screen;
 
@@ -14,6 +14,7 @@ void main() {
 
     uv_screen = res.xy / 2.0 + vec2(0.5, 0.5);
     uv = texcoord;
+    uv.y = 1.0 - uv.y;
 
     gl_Position = res;
 }

@@ -1,10 +1,12 @@
 #version 100
+
 precision lowp float;
 
 varying vec2 uv;
 varying vec2 uv_screen;
 
 uniform sampler2D _ScreenTexture;
+uniform sampler2D tex;
 uniform float t;
 
 vec3 hueShift(vec3 color, float hueAdjust){
@@ -33,16 +35,16 @@ vec3 hueShift(vec3 color, float hueAdjust){
 }
 
 void main() {
-    float gradient = length(uv);
+    vec4 tex = texture2D(tex, uv);
 
-    // gl_FragColor = texture2D(tex, vec2(uv.x, 1.0-uv.y));
-    vec4 tex = texture2D(_ScreenTexture, uv_screen);
+    float a = sqrt(tex.r * tex.g * tex.b);
 
-    if(tex.r != 0.0 && tex.r == tex.g && tex.g == tex.b) {
-      vec3 col = vec3(uv_screen.x, uv_screen.y * 0.5, 1.0);
-      gl_FragColor = vec4(hueShift(col, t), 1.0); 
-    } else {
-      gl_FragColor = tex;
-    }
+    vec3 col = vec3(uv_screen.x, uv_screen.y * 0.5, 1.0);
+
+    vec4 screen = texture2D(_ScreenTexture, uv_screen);
+    vec4 tile = vec4(hueShift(col, t) * a, tex.a);
+
+    gl_FragColor = tile * tex.a + screen * (1.0 - tex.a); 
+
 }
 
