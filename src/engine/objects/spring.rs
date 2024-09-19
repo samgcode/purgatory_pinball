@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use macroquad::prelude::*;
 
 use crate::Assets;
@@ -83,6 +85,13 @@ impl Spring {
       self.pos + (assets.spring.scale_factor * WIDTH * 0.5 - HEIGHT * 0.5) * self.normal,
       WIDTH,
       self.animation_frame,
+      PI / 2.0
+        * match self.direction {
+          Up => 0,
+          Down => 2,
+          Left => 3,
+          Right => 1,
+        } as f32,
     );
   }
 }

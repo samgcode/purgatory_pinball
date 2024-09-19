@@ -14,8 +14,6 @@ pub const HEIGHT: f32 = 1080.0;
 async fn main() {
   let mut game = Game::init().await;
 
-  let mut fixed_dt: f32 = 0.0;
-
   let render_target = render_target_msaa(WIDTH as u32, HEIGHT as u32, 4);
   let shader_target = render_target_msaa(WIDTH as u32, HEIGHT as u32, 4);
   render_target.texture.set_filter(FilterMode::Linear);
@@ -40,11 +38,9 @@ async fn main() {
   .unwrap();
 
   let mut t: f32 = 0.0;
+  let fixed_dt = 1.0 / 60.0;
 
   loop {
-    let dt = get_frame_time();
-    fixed_dt += dt;
-
     let scale: f32 = f32::min(screen_width() / WIDTH, screen_height() / HEIGHT);
 
     if fixed_dt >= 1.0 / 61.0 {
@@ -54,11 +50,9 @@ async fn main() {
       game.fixed_update(fixed_dt / 4.0);
 
       game.redraw(scale);
-
-      fixed_dt = 0.0;
     }
 
-    game.update(dt);
+    game.update();
 
     let display_size = vec2(WIDTH * scale, HEIGHT * scale);
     let display_x = (screen_width() - (WIDTH * scale)) * 0.5;
@@ -103,7 +97,7 @@ async fn main() {
     }
 
     game.draw_ui(scale);
-    draw_text("[V0.47]", 0.0, 50.0 * scale * 0.8, 50.0 * scale, WHITE);
+    draw_text("[V0.48]", 0.0, 50.0 * scale * 0.8, 50.0 * scale, WHITE);
 
     next_frame().await
   }

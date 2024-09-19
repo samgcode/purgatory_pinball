@@ -7,8 +7,8 @@ const MAX_ANGLE_REV: f32 = 200.0;
 
 const DEG_TO_RAD: f32 = std::f32::consts::PI / 180.0;
 
-const SPEED: f32 = 7.0;
-const RETRACT_SPEED: f32 = 6.0;
+const SPEED: f32 = 14.0;
+const RETRACT_SPEED: f32 = 8.0;
 
 pub struct Flipper {
   pub anchor: Vec2,
@@ -18,6 +18,7 @@ pub struct Flipper {
   position: f32,
   pub vel: f32,
   reversed: bool,
+  key_pressed: bool,
 }
 
 impl Flipper {
@@ -30,11 +31,16 @@ impl Flipper {
       position: 0.0,
       vel: 0.0,
       reversed,
+      key_pressed: false,
     }
   }
 
-  pub fn update(&mut self, dt: f32) {
-    if is_key_down(KeyCode::A) {
+  pub fn update(&mut self) {
+    self.key_pressed = is_key_down(KeyCode::A);
+  }
+
+  pub fn fixed_update(&mut self, dt: f32) {
+    if self.key_pressed {
       if self.position < 1.0 {
         self.position += SPEED * dt;
         self.vel = -lerp(SPEED * dt, MIN_ANGLE_REV, MAX_ANGLE_REV) * 2.0;
@@ -51,9 +57,7 @@ impl Flipper {
         self.vel = 0.0;
       }
     }
-  }
 
-  pub fn fixed_update(&mut self, _dt: f32) {
     self.angle = if self.reversed {
       lerp(self.position, MIN_ANGLE_REV, MAX_ANGLE_REV)
     } else {

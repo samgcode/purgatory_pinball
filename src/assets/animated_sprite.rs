@@ -73,7 +73,7 @@ pub struct AnimatedSprite {
 }
 
 impl AnimatedSprite {
-  pub fn draw(&self, texture: &Texture2D, pos: Vec2, width: f32, sprite: usize) {
+  pub fn draw(&self, texture: &Texture2D, pos: Vec2, width: f32, sprite: usize, rotation: f32) {
     let size = width * self.scale_factor;
 
     texture.update(&self.sprites[self.animation[sprite]]);
@@ -85,6 +85,7 @@ impl AnimatedSprite {
       WHITE,
       DrawTextureParams {
         dest_size: Some(Vec2::new(size, size)),
+        rotation,
         ..Default::default()
       },
     );

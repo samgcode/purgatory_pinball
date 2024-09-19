@@ -112,21 +112,27 @@ impl Bumper {
 
   pub fn draw(&self, assets: &Assets) {
     match self.effect_type {
-      BumperType::White => {
-        assets
-          .bumper_white
-          .draw(&self.texture, self.pos, self.radius, self.animation_frame)
-      }
-      BumperType::Blue => {
-        assets
-          .bumper_blue
-          .draw(&self.texture, self.pos, self.radius, self.animation_frame)
-      }
-      BumperType::Pink => {
-        assets
-          .bumper_pink
-          .draw(&self.texture, self.pos, self.radius, self.animation_frame)
-      }
+      BumperType::White => assets.bumper_white.draw(
+        &self.texture,
+        self.pos,
+        self.radius,
+        self.animation_frame,
+        0.0,
+      ),
+      BumperType::Blue => assets.bumper_blue.draw(
+        &self.texture,
+        self.pos,
+        self.radius,
+        self.animation_frame,
+        0.0,
+      ),
+      BumperType::Pink => assets.bumper_pink.draw(
+        &self.texture,
+        self.pos,
+        self.radius,
+        self.animation_frame,
+        0.0,
+      ),
       BumperType::Orange => {
         if self.triggered && self.animation_frame == 0 {
           assets.bumper_orange.draw(
@@ -134,11 +140,16 @@ impl Bumper {
             self.pos,
             self.radius,
             self.animation_length - 1,
+            0.0,
           )
         } else {
-          assets
-            .bumper_orange
-            .draw(&self.texture, self.pos, self.radius, self.animation_frame)
+          assets.bumper_orange.draw(
+            &self.texture,
+            self.pos,
+            self.radius,
+            self.animation_frame,
+            0.0,
+          )
         }
       }
     }

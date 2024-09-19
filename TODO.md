@@ -1,8 +1,6 @@
 # TODO List
 
 - [ ] add second layer
-- [ ] fix score ui scale
-- [ ] add spinners
 - [ ] better camera (smoothing?)
 - [ ] sfx
   - [ ] sfx system

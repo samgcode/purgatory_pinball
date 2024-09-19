@@ -14,7 +14,8 @@ pub struct Game {
   assets: Assets,
 
   ball: Ball,
-  flipper: (Flipper, Flipper),
+  flippers: Vec<Flipper>,
+  invis_flippers: Vec<Flipper>,
   bumpers: Vec<Bumper>,
   springs: Vec<Spring>,
   spinners: Vec<Spinner>,
@@ -34,10 +35,14 @@ impl Game {
       Vec2::new(0.0, 0.0),
       &assets,
     );
-    let flipper = (
+    let flippers = vec![
       Flipper::new(Vec2::new(700.0, 990.0), 135.0, false),
       Flipper::new(Vec2::new(1125.0, 990.0), 135.0, true),
-    );
+    ];
+    let invis_flippers = vec![
+      Flipper::new(Vec2::new(700.0, 996.0), 140.0, false),
+      Flipper::new(Vec2::new(1125.0, 996.0), 140.0, true),
+    ];
 
     #[rustfmt::skip]
     let bumpers = vec![
@@ -52,7 +57,9 @@ impl Game {
     #[rustfmt::skip]
     let springs = vec![
       Spring::new(Vec2::new(1375.0, 1050.0), Direction::Up, Some(1200.0), &assets),
-      // Spring::new(Vec2::new(900.0, 700.0), Direction::Left, None),
+      Spring::new(Vec2::new(1306.0, 325.0), Direction::Left, None, &assets),
+      Spring::new(Vec2::new(1306.0, 390.0), Direction::Left, None, &assets),
+      Spring::new(Vec2::new(518.0, 550.0), Direction::Right, None, &assets),
     ];
 
     let spinners = vec![
@@ -68,7 +75,8 @@ impl Game {
     return Self {
       assets,
       ball,
-      flipper,
+      flippers,
+      invis_flippers,
       bumpers,
       springs,
       spinners,
@@ -79,9 +87,13 @@ impl Game {
     };
   }
 
-  pub fn update(&mut self, dt: f32) {
-    self.flipper.0.update(dt);
-    self.flipper.1.update(dt);
+  pub fn update(&mut self) {
+    for flipper in self.flippers.iter_mut() {
+      flipper.update();
+    }
+    for flipper in self.invis_flippers.iter_mut() {
+      flipper.update();
+    }
 
     if is_key_pressed(KeyCode::R) {
       self.reset();
@@ -104,15 +116,25 @@ impl Game {
   }
 
   pub fn fixed_update(&mut self, fixed_dt: f32) {
+    for flipper in self.flippers.iter_mut() {
+      flipper.fixed_update(fixed_dt);
+    }
+    for flipper in self.invis_flippers.iter_mut() {
+      flipper.fixed_update(fixed_dt);
+    }
+
     self.ball.fixed_update(GRAVITY, fixed_dt);
-    self.flipper.0.fixed_update(fixed_dt);
-    self.flipper.1.fixed_update(fixed_dt);
 
     for wall in self.board.walls.iter() {
       physics::ball_to_line(&mut self.ball, *wall);
     }
-    physics::ball_to_flipper(&mut self.ball, &self.flipper.0);
-    physics::ball_to_flipper(&mut self.ball, &self.flipper.1);
+
+    for flipper in self.flippers.iter() {
+      physics::ball_to_flipper(&mut self.ball, flipper);
+    }
+    for flipper in self.invis_flippers.iter() {
+      physics::ball_to_flipper(&mut self.ball, flipper);
+    }
 
     for bumper in self.bumpers.iter_mut() {
       let score = bumper::ball_to_bumper(&mut self.ball, bumper);
@@ -154,8 +176,9 @@ impl Game {
     self.board.draw();
 
     self.ball.draw(&self.assets);
-    self.flipper.0.draw();
-    self.flipper.1.draw();
+    for flipper in self.flippers.iter() {
+      flipper.draw();
+    }
   }
 
   pub fn draw_ui(&self, scale: f32) {
