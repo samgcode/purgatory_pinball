@@ -3,8 +3,6 @@
 - [ ] add second layer
 - [ ] fix score ui scale
 - [ ] add spinners
-- [ ] tile shader
-  - [ ] fix artifacting
 - [ ] better camera (smoothing?)
 - [ ] sfx
   - [ ] sfx system
