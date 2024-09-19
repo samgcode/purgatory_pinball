@@ -9,42 +9,32 @@ uniform sampler2D _ScreenTexture;
 uniform sampler2D tex;
 uniform float t;
 
-vec3 hueShift(vec3 color, float hueAdjust){
-  const vec3  kRGBToYPrime = vec3 (0.299, 0.587, 0.114);
-  const vec3  kRGBToI      = vec3 (0.596, -0.275, -0.321);
-  const vec3  kRGBToQ      = vec3 (0.212, -0.523, 0.311);
-
-  const vec3  kYIQToR     = vec3 (1.0, 0.956, 0.621);
-  const vec3  kYIQToG     = vec3 (1.0, -0.272, -0.647);
-  const vec3  kYIQToB     = vec3 (1.0, -1.107, 1.704);
-
-  float   YPrime  = dot (color, kRGBToYPrime);
-  float   I       = dot (color, kRGBToI);
-  float   Q       = dot (color, kRGBToQ);
-  float   hue     = atan (Q, I);
-  float   chroma  = sqrt (I * I + Q * Q);
-
-  hue += hueAdjust;
-
-  Q = chroma * sin (hue);
-  I = chroma * cos (hue);
-
-  vec3    yIQ   = vec3 (YPrime, I, Q);
-
-  return vec3( dot (yIQ, kYIQToR), dot (yIQ, kYIQToG), dot (yIQ, kYIQToB) );
+vec3 getGradient(vec4 c1, vec4 c2, vec4 c3, vec4 c4, float value_){
+	float blend1 = smoothstep(c1.w, c2.w, value_);
+	float blend2 = smoothstep(c2.w, c3.w, value_);
+	float blend3 = smoothstep(c3.w, c4.w, value_);
+	
+	vec3 
+	col = mix(c1.rgb, c2.rgb, blend1);
+	col = mix(col, c3.rgb, blend2);
+	col = mix(col, c4.rgb, blend3);
+	
+	return col;
 }
 
 void main() {
-    vec4 tex = texture2D(tex, uv);
+  const vec4 p1 = vec4(1.0, 0.0, 0.0, 0.0);
+  const vec4 p2 = vec4(0.0, 1.0, 0.0, 0.25);
+  const vec4 p3 = vec4(0.0, 0.0, 1.0, 0.75);
+  const vec4 p4 = vec4(1.0, 0.0, 0.0, 1.0);
 
-    float a = sqrt(tex.r * tex.g * tex.b);
+  vec4 tex = texture2D(tex, uv);
+  
+  float a = sqrt(tex.r * tex.g * tex.b);
+  float h = mod(t/10.0 * uv_screen.x * uv_screen.y, 1.0);
 
-    vec3 col = vec3(uv_screen.x, uv_screen.y * 0.5, 1.0);
+  vec4 screen = texture2D(_ScreenTexture, uv_screen);
+  vec4 tile = vec4(getGradient(p1, p2, p3, p4, h), tex.a) * a;
 
-    vec4 screen = texture2D(_ScreenTexture, uv_screen);
-    vec4 tile = vec4(hueShift(col, t) * a, tex.a);
-
-    gl_FragColor = tile * tex.a + screen * (1.0 - tex.a); 
-
+  gl_FragColor = tile * tex.a + screen * (1.0 - tex.a); 
 }
-
