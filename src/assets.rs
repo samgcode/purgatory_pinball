@@ -22,9 +22,10 @@ pub struct Assets {
   pub bumper_white: AnimatedSprite,
   pub bumper_pink: AnimatedSprite,
   pub bumper_orange: AnimatedSprite,
+  pub spring: AnimatedSprite,
   pub tileset: tileset::Tileset,
   pub ball: StaticSprite,
-  pub spring: AnimatedSprite,
+  pub spinner: StaticSprite,
 }
 
 pub async fn load_assets() -> Assets {
@@ -39,6 +40,10 @@ pub async fn load_assets() -> Assets {
     scale_factor: 2.0 * 64.0 / 20.0,
     sprite: include_image!("../assets/ball.png"),
   };
+  let spinner = StaticSprite {
+    scale_factor: 2.0 * 24.0 / 10.0,
+    sprite: include_image!("../assets/minimalspinner/fg_minimalspinner00.png"),
+  };
 
   let spring = include_spring!();
 
@@ -47,9 +52,10 @@ pub async fn load_assets() -> Assets {
     bumper_white,
     bumper_pink,
     bumper_orange,
+    spring,
     tileset,
     ball,
-    spring,
+    spinner,
   };
 }
 

@@ -17,6 +17,7 @@ pub struct Game {
   flipper: (Flipper, Flipper),
   bumpers: Vec<Bumper>,
   springs: Vec<Spring>,
+  spinners: Vec<Spinner>,
   lose_zone: TriggerZone,
   score_system: ScoreSystem,
   board: Board,
@@ -54,6 +55,10 @@ impl Game {
       // Spring::new(Vec2::new(900.0, 700.0), Direction::Left, None),
     ];
 
+    let spinners = vec![
+    // Spinner::new(vec2(600.0, 500.0), &assets)
+    ];
+
     let lose_zone = TriggerZone::new(Vec2::new(500.0, 1100.0), Vec2::new(800.0, 20.0));
 
     let score_system = ScoreSystem::new();
@@ -66,6 +71,7 @@ impl Game {
       flipper,
       bumpers,
       springs,
+      spinners,
       lose_zone,
       score_system,
       board,
@@ -141,6 +147,10 @@ impl Game {
   }
 
   pub fn draw_shaded(&mut self) {
+    for spinner in self.spinners.iter() {
+      spinner.draw(&self.assets);
+    }
+
     self.board.draw();
 
     self.ball.draw(&self.assets);
