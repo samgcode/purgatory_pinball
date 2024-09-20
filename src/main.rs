@@ -92,12 +92,18 @@ async fn main() {
       t += 0.0003;
 
       gl_use_material(&tile_material);
-      draw_rectangle(display_x, display_y, display_size.x, display_size.y, RED);
+      draw_rectangle(
+        display_x + game.camera_pos.x,
+        display_y + game.camera_pos.y,
+        display_size.x,
+        display_size.y,
+        RED,
+      );
       gl_use_default_material();
     }
 
     game.draw_ui(scale);
-    draw_text("[V0.48]", 0.0, 50.0 * scale * 0.8, 50.0 * scale, WHITE);
+    draw_text("[V0.49]", 0.0, 50.0 * scale * 0.8, 50.0 * scale, WHITE);
 
     next_frame().await
   }

@@ -8,17 +8,19 @@ pub use score::ScoreType;
 
 const GRAVITY: Vec2 = Vec2::new(0.0, 400.0);
 const START_HEIGHT: f32 = 900.0;
-const CAMERA_SPEED: f32 = 0.1;
+const CAMERA_SPEED: f32 = 0.04;
 
 pub struct Game {
   assets: Assets,
 
-  ball: Ball,
   flippers: Vec<Flipper>,
   invis_flippers: Vec<Flipper>,
   bumpers: Vec<Bumper>,
   springs: Vec<Spring>,
   spinners: Vec<Spinner>,
+  decals: Vec<Decal>,
+
+  ball: Ball,
   lose_zone: TriggerZone,
   score_system: ScoreSystem,
   board: Board,
@@ -51,7 +53,6 @@ impl Game {
       Bumper::new(Vec2::new(1050.0, 550.0), None, None, &assets, BumperType::Pink),
       Bumper::new(Vec2::new(1150.0, 350.0), None, None, &assets, BumperType::Blue),
       Bumper::new(Vec2::new(900.0, 240.0), None, None, &assets, BumperType::Blue),
-      // Bumper::new( Vec2::new(1375.0, 1100.0), Some(1500.0), Some(ScoreType::Points(0)), &assets, BumperType::White),
     ];
 
     #[rustfmt::skip]
@@ -72,6 +73,11 @@ impl Game {
 
     let board = Board::new(&assets);
 
+    let decals = vec![
+      Decal::new(Vec2::new(975.0, 500.0), &assets, DecalType::Background),
+      Decal::new(Vec2::new(975.0, 1140.0), &assets, DecalType::Background),
+    ];
+
     return Self {
       assets,
       ball,
@@ -80,6 +86,7 @@ impl Game {
       bumpers,
       springs,
       spinners,
+      decals,
       lose_zone,
       score_system,
       board,
@@ -100,7 +107,7 @@ impl Game {
     }
   }
 
-  pub fn redraw(&mut self, _scale: f32) {
+  pub fn redraw(&mut self, scale: f32) {
     for bumper in self.bumpers.iter_mut() {
       bumper.redraw();
     }
@@ -111,8 +118,8 @@ impl Game {
 
     let center = Vec2::new(1920.0 / 2.0, 1080.0 / 2.0);
 
-    let _pos = center - self.ball.pos;
-    // self.camera_pos = pos * scale * CAMERA_SPEED;
+    let pos = center - self.ball.pos;
+    self.camera_pos = pos * scale * CAMERA_SPEED;
   }
 
   pub fn fixed_update(&mut self, fixed_dt: f32) {
@@ -159,6 +166,10 @@ impl Game {
   }
 
   pub fn draw(&mut self) {
+    for decal in self.decals.iter() {
+      decal.draw(&self.assets);
+    }
+
     for bumper in self.bumpers.iter() {
       bumper.draw(&self.assets);
     }

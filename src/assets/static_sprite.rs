@@ -2,6 +2,7 @@ use macroquad::prelude::*;
 
 pub struct StaticSprite {
   pub scale_factor: f32,
+  pub aspect_ratio: f32,
   pub sprite: Image,
 }
 
@@ -15,7 +16,7 @@ impl StaticSprite {
       pos.y - size / 2.0,
       WHITE,
       DrawTextureParams {
-        dest_size: Some(Vec2::new(size, size)),
+        dest_size: Some(Vec2::new(size, size * self.aspect_ratio)),
         ..Default::default()
       },
     );

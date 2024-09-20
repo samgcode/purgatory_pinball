@@ -1,7 +1,11 @@
 # TODO List
 
 - [ ] add second layer
-- [ ] better camera (smoothing?)
+- [ ] decals
+- [ ] main menu
+- [ ] level select
+- [ ] moving bumpers
+- [ ] particles?
 - [ ] sfx
   - [ ] sfx system
   - [ ] music
