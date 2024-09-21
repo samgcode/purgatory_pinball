@@ -82,6 +82,31 @@ macro_rules! include_tileset {
   };
 }
 
+#[macro_export]
+macro_rules! include_basic_tileset {
+  ( ) => {
+    tileset::BasicTileset {
+      sprites: vec![
+        include_image!(concat!("../../assets/decals/empty.png")),
+        include_image!(concat!("../../assets/decals/line_a.png")),
+        include_image!(concat!("../../assets/decals/line_b.png")),
+        include_image!(concat!("../../assets/decals/line_c.png")),
+        include_image!(concat!("../../assets/decals/line_d.png")),
+        include_image!(concat!("../../assets/decals/diag_a.png")),
+        include_image!(concat!("../../assets/decals/diag_b.png")),
+        include_image!(concat!("../../assets/decals/circle_a.png")),
+        include_image!(concat!("../../assets/decals/circle_b.png")),
+        include_image!(concat!("../../assets/decals/circle_c.png")),
+        include_image!(concat!("../../assets/decals/circle_d.png")),
+        include_image!(concat!("../../assets/decals/corner_a.png")),
+        include_image!(concat!("../../assets/decals/corner_b.png")),
+        include_image!(concat!("../../assets/decals/corner_c.png")),
+        include_image!(concat!("../../assets/decals/corner_d.png")),
+      ],
+    }
+  };
+}
+
 pub struct Tileset {
   pub sprites: Vec<Image>,
 }
@@ -148,4 +173,55 @@ fn match_rule(ti: usize, square: [[u8; 3]; 3]) -> bool {
   }
 
   return true;
+}
+
+pub struct BasicTileset {
+  pub sprites: Vec<Image>,
+}
+
+impl BasicTileset {
+  pub fn get_tiles_from_map(
+    &self,
+    map: &[[(u8, u8); levels::DECAL_WIDTH]; levels::DECAL_HEIGHT],
+  ) -> Vec<Vec<(usize, usize)>> {
+    let mut tiles = Vec::new();
+
+    for i in 0..map.len() {
+      let mut row = Vec::new();
+      for j in 0..map[i].len() {
+        if i == 0 || j == 0 || i == map.len() - 1 || j == map[i].len() - 1 {
+          row.push((map[i][j].0 as usize, map[i][j].1 as usize));
+          continue;
+        }
+
+        let left = map[i][j - 1].0;
+        let right = map[i][j + 1].0;
+        let up = map[i - 1][j].0;
+        let down = map[i + 1][j].0;
+
+        if (left == 5 && up != 0) || (left != 0 && up == 5) {
+          row.push((14, map[i][j].1 as usize));
+          continue;
+        }
+        if left == 6 && down == 6 {
+          row.push((13, map[i][j].1 as usize));
+          continue;
+        }
+        if (right == 5 && down != 0) || (right != 0 && down == 5) {
+          row.push((12, map[i][j].1 as usize));
+          continue;
+        }
+        if right == 6 && up == 6 {
+          row.push((11, map[i][j].1 as usize));
+          continue;
+        }
+
+        row.push((map[i][j].0 as usize, map[i][j].1 as usize));
+      }
+
+      tiles.push(row);
+    }
+
+    return tiles;
+  }
 }

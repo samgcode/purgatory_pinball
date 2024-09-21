@@ -24,6 +24,7 @@ pub struct Game {
   lose_zone: TriggerZone,
   score_system: ScoreSystem,
   board: Board,
+  decal_map: DecalMap,
 
   pub camera_pos: Vec2,
 }
@@ -72,6 +73,7 @@ impl Game {
     let score_system = ScoreSystem::new();
 
     let board = Board::new(&assets);
+    let decal_map = DecalMap::new(&assets);
 
     let decals = vec![
       Decal::new(Vec2::new(975.0, 500.0), &assets, DecalType::Background),
@@ -90,6 +92,7 @@ impl Game {
       lose_zone,
       score_system,
       board,
+      decal_map,
       camera_pos: Vec2::new(0.0, 0.0),
     };
   }
@@ -169,6 +172,7 @@ impl Game {
     for decal in self.decals.iter() {
       decal.draw(&self.assets);
     }
+    self.decal_map.draw();
 
     for bumper in self.bumpers.iter() {
       bumper.draw(&self.assets);

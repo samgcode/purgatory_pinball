@@ -103,7 +103,7 @@ async fn main() {
     }
 
     game.draw_ui(scale);
-    draw_text("[V0.49]", 0.0, 50.0 * scale * 0.8, 50.0 * scale, WHITE);
+    draw_text("[V0.50]", 0.0, 50.0 * scale * 0.8, 50.0 * scale, WHITE);
 
     next_frame().await
   }

@@ -1,8 +1,8 @@
 use macroquad::prelude::*;
 
-use super::static_sprite::StaticSprite;
+use super::{static_sprite::StaticSprite, tileset, tileset::BasicTileset};
 
-use crate::include_image;
+use crate::{include_basic_tileset, include_image};
 
 const BG_COLOR: u8 = 64;
 
@@ -12,6 +12,7 @@ pub enum DecalType {
 
 pub struct Decals {
   pub background: StaticSprite,
+  pub bg_lines: BasicTileset,
 }
 
 impl Decals {
@@ -37,7 +38,12 @@ impl Decals {
       sprite: bg_image,
     };
 
-    return Self { background };
+    let bg_lines = include_basic_tileset!();
+
+    return Self {
+      background,
+      bg_lines,
+    };
   }
 
   pub fn create_texture(&self, decal_type: &DecalType) -> Texture2D {
