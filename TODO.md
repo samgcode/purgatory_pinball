@@ -1,7 +1,6 @@
 # TODO List
 
 - [ ] add second layer
-- [ ] decals
 - [ ] main menu
 - [ ] level select
 - [ ] moving bumpers

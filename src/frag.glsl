@@ -23,10 +23,10 @@ vec3 getGradient(vec4 c1, vec4 c2, vec4 c3, vec4 c4, float value_){
 }
 
 void main() {
-  const vec4 p1 = vec4(1.0, 0.0, 0.0, 0.0);
-  const vec4 p2 = vec4(0.0, 1.0, 0.0, 0.25);
-  const vec4 p3 = vec4(0.0, 0.0, 1.0, 0.75);
-  const vec4 p4 = vec4(1.0, 0.0, 0.0, 1.0);
+  const vec4 p1 = vec4(1.0, 0.290196078431, 0.290196078431, 0.0);
+  const vec4 p2 = vec4(0.509803921569, 1.0, 1.0, 0.2);
+  const vec4 p3 = vec4(1.0, 0.360784313725, 0.941176470588, 0.4);
+  const vec4 p4 = vec4(1.0, 0.290196078431, 0.290196078431, 1.0);
 
   vec4 tex = texture2D(tex, uv);
   

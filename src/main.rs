@@ -89,7 +89,7 @@ async fn main() {
 
       tile_material.set_uniform("t", t);
       tile_material.set_texture("tex", shader_target.texture.clone());
-      t += 0.0003;
+      t += 0.0006;
 
       gl_use_material(&tile_material);
       draw_rectangle(
@@ -103,7 +103,7 @@ async fn main() {
     }
 
     game.draw_ui(scale);
-    draw_text("[V0.50]", 0.0, 50.0 * scale * 0.8, 50.0 * scale, WHITE);
+    draw_text("[V0.51]", 0.0, 50.0 * scale * 0.8, 50.0 * scale, WHITE);
 
     next_frame().await
   }
